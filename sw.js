@@ -1,9 +1,9 @@
-const CACHE_NAME = 'adlp-v1';
+const CACHE_NAME = 'adlp-v2';
 const ASSETS = [
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 // Install: cache core assets
