@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.pwa_builder.adlp",
+    "sha256_cert_fingerprints": ["6D:FC:C6:6D:EB:A0:E3:2E:EC:1D:E0:A6:EC:5C:DD:2E:27:C5:F9:3E:B4:50:7B:59:B1:A2:4A:1B:BA:E3:40:BF"]
+  }
+}]
