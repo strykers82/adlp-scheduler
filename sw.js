@@ -1,4 +1,4 @@
-const CACHE_NAME = 'adlp-v6';
+const CACHE_NAME = 'adlp-v7';
 const ASSETS = [
   './index.html',
   './manifest.json',

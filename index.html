@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#C9A8DF">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -49,7 +49,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 #loginScreen{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   background:linear-gradient(135deg,#C9A8DF 0%,#DDD0F4 40%,#EEE5F8 75%,#f0d8b0 100%);
-  position:relative;overflow:hidden;padding-top:env(safe-area-inset-top);
+  position:relative;overflow:hidden;
 }
 #loginScreen::before{
   content:'';position:absolute;width:600px;height:600px;
@@ -124,7 +124,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   background:linear-gradient(135deg,#C9A8DF 0%,#DDD0F4 50%,#EEE5F8 100%);
   border-bottom:3px solid var(--gold);height:64px;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 22px;padding-top:env(safe-area-inset-top);position:sticky;top:0;z-index:100;
+  padding:0 22px;position:sticky;top:0;z-index:100;
   box-shadow:0 4px 20px rgba(42,26,94,.25);
 }
 .logo{display:flex;align-items:center;gap:10px;}
@@ -852,7 +852,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   .panels-row,.att-panels,.reports-grid{grid-template-columns:1fr;}
   .day-strip,.day-cols{grid-template-columns:repeat(4,1fr);}
   .header-nav{display:none;}
-  .header{height:52px;padding:0 10px;}
+  .header{height:52px;padding:0 10px;position:fixed;top:0;left:0;right:0;z-index:100;}
+  .notif-bar{font-size:12px;padding:8px 12px;position:fixed;top:52px;left:0;right:0;z-index:99;}
+  .app-body{margin-top:52px;}
   .logo-icon{width:36px !important;height:36px !important;}
   .logo-icon img{width:28px !important;height:28px !important;}
   .logo h1{font-size:14px;}
@@ -866,7 +868,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   .user-chip .user-name{display:none;}
   .user-chip .user-role{display:none;}
   .quick-actions-dd{right:-10px;}
-  .notif-bar{font-size:12px;padding:8px 12px;}
 }
 
 /* ── Mobile Simplified Dashboard ── */

@@ -4,7 +4,7 @@
   "description": "Staff scheduling, attendance & communication for ADLP LLC",
   "start_url": "./index.html",
   "scope": "./",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "any",
   "background_color": "#C9A8DF",
   "theme_color": "#C9A8DF",
