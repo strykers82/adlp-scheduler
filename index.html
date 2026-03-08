@@ -146,6 +146,63 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .nav-btn:hover{background:rgba(255,255,255,.12);color:white;}
 .nav-btn.active{background:rgba(255,255,255,.25);color:white;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.1);}
 .header-right{display:flex;align-items:center;gap:10px;}
+/* Attendance dropdown */
+.nav-dd-wrap{position:relative;}
+.nav-dropdown{
+  position:absolute;top:100%;left:0;margin-top:6px;
+  background:white;border-radius:10px;min-width:200px;
+  box-shadow:0 8px 30px rgba(61,26,92,.2);z-index:200;
+  border:1px solid rgba(155,125,202,.12);overflow:hidden;
+}
+.nav-dd-item{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;font-size:13px;font-weight:600;
+  color:var(--text);cursor:pointer;transition:background .1s;
+  font-family:'DM Sans',sans-serif;
+}
+.nav-dd-item:hover{background:var(--lav-pale);}
+.nav-dd-icon{font-size:16px;width:20px;text-align:center;}
+/* Notification bell */
+.hdr-notif-btn{
+  position:relative;background:none;border:none;
+  font-size:18px;cursor:pointer;padding:6px;
+  border-radius:8px;transition:background .15s;
+}
+.hdr-notif-btn:hover{background:rgba(255,255,255,.3);}
+.notif-badge{
+  position:absolute;top:0;right:0;
+  min-width:16px;height:16px;border-radius:8px;
+  background:#dc2626;color:white;font-size:9px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 4px;line-height:1;
+}
+.notif-badge:empty{display:none;}
+.notif-panel{
+  position:absolute;top:100%;right:0;margin-top:8px;
+  width:340px;max-height:420px;background:white;
+  border-radius:12px;box-shadow:0 8px 30px rgba(61,26,92,.2);
+  z-index:200;border:1px solid rgba(155,125,202,.12);
+  overflow:hidden;display:flex;flex-direction:column;
+}
+.notif-panel-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-bottom:1px solid rgba(155,125,202,.08);
+  font-size:14px;color:var(--text);
+}
+.notif-mark-read{font-size:12px;color:var(--lav-dark);cursor:pointer;font-weight:600;}
+.notif-mark-read:hover{text-decoration:underline;}
+.notif-panel-body{overflow-y:auto;flex:1;max-height:360px;}
+.notif-item{
+  display:flex;gap:10px;padding:12px 16px;
+  border-bottom:1px solid rgba(155,125,202,.04);
+  cursor:pointer;transition:background .1s;
+}
+.notif-item:hover{background:var(--lav-pale);}
+.notif-item.unread{background:rgba(200,134,10,.04);}
+.notif-item-icon{font-size:18px;flex-shrink:0;margin-top:2px;}
+.notif-item-text{font-size:13px;color:var(--text);line-height:1.4;}
+.notif-item-text strong{font-weight:700;}
+.notif-item-time{font-size:11px;color:var(--text-light);margin-top:2px;}
 .hdr-dots-btn{
   background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
   color:white;width:34px;height:34px;border-radius:8px;cursor:pointer;
@@ -355,6 +412,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 }
 .shift-cell.empty:hover .hover-add-btn{display:flex;}
 .shift-cell .hover-add-btn:hover{background:rgba(201,168,223,.2);border-color:var(--lav);border-style:solid;}
+
+/* Add shift link for non-empty cells */
+.shift-cell .add-shift-link{
+  display:none;padding:4px 8px;margin-top:4px;
+  font-size:11px;color:var(--lav-dark);cursor:pointer;
+  border:1.5px dashed rgba(155,125,202,.3);border-radius:6px;
+  text-align:center;font-family:'DM Sans',sans-serif;font-weight:600;
+  transition:all .12s;
+}
+.shift-cell:not(.empty):hover .add-shift-link{display:block;}
+.shift-cell .add-shift-link:hover{background:var(--lav-pale);border-color:var(--lav);}
 .hab-icon{font-size:22px;line-height:1;font-weight:300;}
 .hab-label{font-size:11px;font-weight:700;letter-spacing:.5px;opacity:.75;}
 .shift-cell.is-today .hover-add-btn{background:rgba(255,248,232,.8);border-color:rgba(200,134,10,.4);color:var(--gold-dark);}
@@ -419,6 +487,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   background:white;border-radius:13px;overflow:hidden;
   box-shadow:0 2px 14px rgba(107,79,160,.08);min-height:180px;display:flex;flex-direction:column;
 }
+.day-col:last-child{}
 .day-col.today-dc{box-shadow:0 4px 18px rgba(200,134,10,.22);}
 .dc-head{
   padding:10px 12px;text-align:center;
@@ -832,6 +901,149 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .ann-send:hover{transform:translateY(-1px);}
 
 /* TOAST */
+/* ── Task Lists Modal ── */
+.tl-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px; border-bottom: 1px solid rgba(155,125,202,.1);
+}
+.tl-modal-title {
+  font-family: 'Playfair Display',serif; font-size: 18px; font-weight: 700;
+  color: var(--text);
+}
+.tl-create-btn {
+  font-size: 13px; color: var(--lav-dark); cursor: pointer; font-weight: 600;
+}
+.tl-create-btn:hover { text-decoration: underline; }
+.tl-tabs {
+  display: flex; gap: 0; border-bottom: 2px solid rgba(155,125,202,.1);
+  padding: 0 22px;
+}
+.tl-tab {
+  padding: 12px 16px; background: none; border: none;
+  font-size: 13px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .5px; cursor: pointer; color: var(--text-light);
+  border-bottom: 3px solid transparent; margin-bottom: -2px;
+  font-family: 'DM Sans',sans-serif;
+}
+.tl-tab.active { color: var(--lav-dark); border-bottom-color: var(--lav-dark); }
+.tl-body { min-height: 200px; padding: 0; }
+.tl-empty {
+  text-align: center; padding: 40px 30px; color: var(--text-light);
+  font-size: 14px; line-height: 1.6;
+}
+.tl-list { padding: 12px 22px; }
+.tl-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid rgba(155,125,202,.06);
+}
+.tl-item-check {
+  width: 20px; height: 20px; border-radius: 4px;
+  border: 2px solid rgba(155,125,202,.25); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: white; flex-shrink: 0;
+}
+.tl-item-check.done { background: #059669; border-color: #059669; }
+.tl-item-text { font-size: 14px; color: var(--text); }
+.tl-item-text.done { text-decoration: line-through; color: var(--text-light); }
+
+/* ── New Task List Wizard ── */
+.ntl-sidebar {
+  width: 160px; background: var(--gray-bg); padding: 24px 16px;
+  border-right: 1px solid rgba(155,125,202,.1); flex-shrink: 0;
+}
+.ntl-sidebar-title {
+  font-family: 'Playfair Display',serif; font-size: 16px; font-weight: 700;
+  color: var(--text); margin-bottom: 20px;
+}
+.ntl-steps { display: flex; flex-direction: column; gap: 12px; }
+.ntl-step {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--text-light); font-weight: 500;
+}
+.ntl-step-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; background: rgba(155,125,202,.15);
+  color: var(--text-light);
+}
+.ntl-step-num.active { background: #059669; color: white; }
+.ntl-step-num.done { background: #059669; color: white; }
+.ntl-main { flex: 1; display: flex; flex-direction: column; }
+.ntl-main-header {
+  display: flex; justify-content: flex-end; padding: 12px 16px;
+}
+.ntl-body { flex: 1; padding: 0 24px; overflow-y: auto; }
+.ntl-question {
+  font-family: 'Playfair Display',serif; font-size: 20px; font-weight: 700;
+  color: var(--text); margin-bottom: 20px;
+}
+.ntl-type-cards { display: flex; gap: 16px; }
+.ntl-type-card {
+  flex: 1; border: 2px solid rgba(155,125,202,.15); border-radius: 12px;
+  padding: 24px 16px; text-align: center; cursor: pointer; transition: all .15s;
+}
+.ntl-type-card:hover { border-color: var(--lav); }
+.ntl-type-card.selected { border-color: var(--lav-dark); background: var(--lav-pale); }
+.ntl-type-icon { font-size: 28px; margin-bottom: 8px; }
+.ntl-type-name {
+  font-size: 14px; font-weight: 800; letter-spacing: .5px;
+  text-transform: uppercase; color: var(--text); margin-bottom: 6px;
+}
+.ntl-type-desc { font-size: 12px; color: var(--text-light); line-height: 1.4; }
+.ntl-name-input {
+  width: 100%; border: 2px solid rgba(155,125,202,.15); border-radius: 10px;
+  padding: 14px 16px; font-size: 15px; font-family: 'DM Sans',sans-serif;
+  color: var(--text); outline: none;
+}
+.ntl-name-input:focus { border-color: var(--lav-dark); }
+.ntl-task-list { margin-bottom: 12px; }
+.ntl-task-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid rgba(155,125,202,.06);
+}
+.ntl-task-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--lav-pale); color: var(--lav-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.ntl-task-text { flex: 1; font-size: 14px; color: var(--text); }
+.ntl-task-del { cursor: pointer; color: var(--text-light); font-size: 14px; }
+.ntl-task-del:hover { color: #dc2626; }
+.ntl-add-row { display: flex; gap: 8px; }
+.ntl-add-input {
+  flex: 1; border: 2px solid rgba(155,125,202,.15); border-radius: 8px;
+  padding: 10px 14px; font-size: 14px; font-family: 'DM Sans',sans-serif;
+  color: var(--text); outline: none;
+}
+.ntl-add-input:focus { border-color: var(--lav-dark); }
+.ntl-add-btn {
+  width: 40px; height: 40px; border-radius: 8px;
+  background: var(--lav-dark); color: white; border: none;
+  font-size: 20px; cursor: pointer;
+}
+.ntl-add-btn:active { opacity: .8; }
+.ntl-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 24px; border-top: 1px solid rgba(155,125,202,.1);
+}
+.ntl-back-btn {
+  background: none; border: none; color: var(--text-light);
+  font-size: 13px; cursor: pointer; font-family: 'DM Sans',sans-serif;
+}
+.ntl-back-btn:hover { color: var(--text); }
+.ntl-continue-btn {
+  padding: 10px 24px; border: none; border-radius: 8px;
+  background: var(--lav-dark); color: white;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  font-family: 'DM Sans',sans-serif;
+}
+.ntl-continue-btn:active { opacity: .85; }
+@media(max-width:768px) {
+  .ntl-sidebar { display: none; }
+  .ntl-type-cards { flex-direction: column; }
+}
+
 .toast{
   position:fixed;bottom:22px;right:22px;
   background:linear-gradient(135deg,#6a52aa,#8a6ccc);
@@ -1056,6 +1268,142 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   display: flex; background: linear-gradient(135deg,#5a3580,#8B6BB0);
   padding: 8px 4px; overflow-x: auto; position: sticky; top: 82px; z-index: 18;
 }
+/* ── Mobile Calendar Dropdown ── */
+.ms-cal-dropdown {
+  display: none; background: linear-gradient(135deg,#4a2270,#6B4FA0);
+  padding: 8px 12px 14px; position: sticky; top: 82px; z-index: 17;
+  animation: calSlideDown .2s ease;
+}
+.ms-cal-dropdown.open { display: block; }
+@keyframes calSlideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 300px; } }
+.ms-cal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 8px 8px; color: white;
+}
+.ms-cal-month {
+  font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700;
+}
+.ms-cal-arrow {
+  font-size: 14px; cursor: pointer; padding: 4px 10px;
+  color: rgba(255,255,255,.7); user-select: none;
+}
+.ms-cal-arrow:active { color: white; }
+.ms-cal-days {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  text-align: center; color: rgba(255,255,255,.5);
+  font-size: 11px; font-weight: 600; padding-bottom: 4px;
+}
+.ms-cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+}
+.ms-cal-cell {
+  text-align: center; padding: 7px 0; border-radius: 50%;
+  font-size: 13px; font-weight: 500; color: rgba(255,255,255,.8);
+  cursor: pointer; width: 36px; height: 36px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+}
+.ms-cal-cell:active { background: rgba(255,255,255,.15); }
+.ms-cal-cell.today { border: 2px solid var(--gold-dark); color: white; font-weight: 700; }
+.ms-cal-cell.selected { background: var(--gold-dark); color: white; font-weight: 700; }
+.ms-cal-cell.other-month { color: rgba(255,255,255,.25); }
+.ms-cal-cell.has-shift { position: relative; }
+.ms-cal-cell.has-shift::after {
+  content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--gold-dark);
+}
+/* ── Mobile Filter Panel ── */
+.ms-filter-panel {
+  display: none; position: fixed; inset: 0;
+  background: white; z-index: 900;
+  animation: msfSlideIn .2s ease;
+  flex-direction: column;
+}
+.ms-filter-panel.open { display: flex; }
+@keyframes msfSlideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+.ms-filter-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4);
+  z-index: 899;
+}
+.ms-filter-overlay.open { display: block; }
+.msf-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; 
+  background: linear-gradient(135deg,#3D1A5C,#6B4FA0);
+  color: white;
+}
+.msf-title { font-family: 'Playfair Display',serif; font-size: 18px; font-weight: 700; }
+.msf-body { flex: 1; overflow-y: auto; padding: 0; }
+.msf-footer {
+  padding: 12px 18px; border-top: 1px solid rgba(155,125,202,.1);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.msf-reset-link {
+  font-size: 13px; color: var(--lav-dark); cursor: pointer;
+  font-weight: 600; text-decoration: underline;
+}
+.msf-apply-btn {
+  width: 100%; padding: 14px; border: none; border-radius: 10px;
+  background: linear-gradient(135deg,#3D1A5C,#6B4FA0);
+  color: white; font-size: 15px; font-weight: 700; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.msf-apply-btn:active { opacity: .85; }
+.msf-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px; background: white;
+  border-bottom: 1px solid rgba(155,125,202,.06);
+  cursor: pointer;
+}
+.msf-row:active { background: var(--lav-pale); }
+.msf-row-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; background: var(--lav-pale);
+  color: var(--lav-dark);
+}
+.msf-row-info { flex: 1; }
+.msf-row-label {
+  font-size: 11px; color: var(--text-light); text-transform: uppercase;
+  letter-spacing: .5px; font-weight: 600;
+}
+.msf-row-value {
+  font-size: 15px; font-weight: 600; color: var(--text); margin-top: 1px;
+}
+.msf-row-arrow { color: var(--text-light); font-size: 14px; }
+/* Filter sub-page */
+.msf-sub {
+  display: none; position: fixed; inset: 0;
+  background: white; z-index: 910; flex-direction: column;
+  animation: msfSlideIn .2s ease;
+}
+.msf-sub.open { display: flex; }
+.msf-sub-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg,#3D1A5C,#6B4FA0);
+  color: white;
+}
+.msf-sub-title { font-family: 'Playfair Display',serif; font-size: 18px; font-weight: 700; flex: 1; }
+.msf-sub-body { flex: 1; overflow-y: auto; }
+.msf-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; border-bottom: 1px solid rgba(155,125,202,.06);
+  cursor: pointer;
+}
+.msf-option:active { background: var(--lav-pale); }
+.msf-option-check {
+  width: 22px; height: 22px; border-radius: 6px;
+  border: 2px solid rgba(155,125,202,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: white; flex-shrink: 0;
+}
+.msf-option-check.active {
+  background: var(--lav-dark); border-color: var(--lav-dark);
+}
+.msf-option-dot {
+  width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+}
+.msf-option-name { font-size: 15px; font-weight: 500; color: var(--text); }
 .ms-day-pill {
   flex: 1; min-width: 44px; display: flex; flex-direction: column;
   align-items: center; gap: 2px; padding: 6px 4px; border-radius: 10px;
@@ -1116,10 +1464,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 }
 
 /* ── Swipe Slide Transitions ── */
-.swipe-left-enter { animation: swipeInFromRight .2s ease forwards; }
-.swipe-right-enter { animation: swipeInFromLeft .2s ease forwards; }
-@keyframes swipeInFromRight { from { transform: translateX(40px); opacity: 0.6; } to { transform: translateX(0); opacity: 1; } }
-@keyframes swipeInFromLeft { from { transform: translateX(-40px); opacity: 0.6; } to { transform: translateX(0); opacity: 1; } }
+.swipe-container { transition: transform .25s ease, opacity .25s ease; }
+.swipe-snap-left { transform: translateX(-100%); opacity: 0; }
+.swipe-snap-right { transform: translateX(100%); opacity: 0; }
+.swipe-enter-left { animation: enterFromLeft .25s ease forwards; }
+.swipe-enter-right { animation: enterFromRight .25s ease forwards; }
+@keyframes enterFromLeft { from { transform: translateX(-60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes enterFromRight { from { transform: translateX(60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
 /* ── Mobile Bottom Navigation ── */
 .mob-bottom-nav {
@@ -1153,6 +1504,265 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .mob-more-page {
   background: var(--gray-bg); min-height: 100vh; padding-bottom: 70px;
 }
+
+/* ── Mobile Shift Detail ── */
+.mob-shift-detail {
+  background: var(--gray-bg); min-height: 100vh; padding-bottom: 70px;
+}
+.msd-content { padding: 0; }
+.msd-row {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 18px; background: white;
+  border-bottom: 1px solid rgba(155,125,202,.06);
+}
+.msd-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; background: var(--lav-pale);
+}
+.msd-label {
+  font-size: 11px; color: var(--text-light); text-transform: uppercase;
+  letter-spacing: .5px; font-weight: 600; margin-bottom: 2px;
+}
+.msd-value {
+  font-size: 15px; font-weight: 600; color: var(--text);
+}
+.msd-sub {
+  font-size: 12px; color: var(--text-light); margin-top: 1px;
+}
+.msd-notes {
+  padding: 14px 18px; background: white;
+  border-bottom: 1px solid rgba(155,125,202,.06);
+}
+.msd-notes-label {
+  font-size: 11px; color: var(--text-light); text-transform: uppercase;
+  letter-spacing: .5px; font-weight: 600; margin-bottom: 6px;
+}
+.msd-notes-text {
+  font-size: 14px; color: var(--text); line-height: 1.5;
+  background: var(--lav-pale); padding: 10px 14px; border-radius: 8px;
+}
+.msd-divider {
+  height: 10px; background: var(--gray-bg);
+}
+.msd-actions {
+  padding: 8px 0;
+}
+.msd-action-btn {
+  display: block; width: 100%; text-align: left;
+  padding: 14px 18px; background: white; border: none;
+  border-bottom: 1px solid rgba(155,125,202,.06);
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.msd-action-btn.primary { color: var(--lav-dark); }
+.msd-action-btn.warn { color: #dc2626; }
+.msd-action-btn:active { background: var(--lav-pale); }
+
+/* ── Mobile Availability Page ── */
+.mob-avail-page {
+  background: var(--gray-bg); min-height: 100vh; padding-bottom: 70px;
+}
+.mav-cal {
+  background: white; padding: 8px 12px 12px;
+  border-bottom: 1px solid rgba(155,125,202,.08);
+}
+.mav-cal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 4px;
+}
+.mav-cal-month {
+  font-family: 'Playfair Display',serif; font-size: 16px; font-weight: 700;
+  color: var(--text);
+}
+.mav-cal-arrow {
+  font-size: 22px; cursor: pointer; padding: 4px 12px;
+  color: var(--text-light); user-select: none; font-weight: 300;
+}
+.mav-cal-arrow:active { color: var(--lav-dark); }
+.mav-cal-days {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  text-align: center; color: var(--text-light);
+  font-size: 12px; font-weight: 600; padding: 4px 0;
+}
+.mav-cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+}
+.mav-cal-cell {
+  text-align: center; padding: 8px 0; border-radius: 50%;
+  font-size: 14px; font-weight: 500; color: var(--text);
+  cursor: pointer; width: 36px; height: 36px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+}
+.mav-cal-cell:active { background: var(--lav-pale); }
+.mav-cal-cell.today {
+  background: var(--lav-dark); color: white; font-weight: 700;
+}
+.mav-cal-cell.selected { border: 2px solid var(--gold-dark); }
+.mav-cal-cell.other-month { color: rgba(0,0,0,.2); }
+.mav-cal-cell.has-avail {
+  position: relative;
+}
+.mav-cal-cell.has-avail::after {
+  content: ''; position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%; background: #059669;
+}
+.mav-day-list { padding: 8px 0; }
+.mav-day-item {
+  background: white; margin: 0 0 1px;
+  border-bottom: 1px solid rgba(155,125,202,.06);
+}
+.mav-day-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+}
+.mav-day-date {
+  font-size: 14px; font-weight: 700; color: var(--lav-dark);
+}
+.mav-day-add {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 2px solid rgba(155,125,202,.25); background: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--lav-dark); cursor: pointer;
+}
+.mav-day-add:active { background: var(--lav-pale); }
+.mav-day-body {
+  padding: 0 18px 12px; font-size: 13px; color: var(--text-light);
+}
+.mav-pref {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 0; font-size: 13px;
+}
+.mav-pref-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.mav-pref-text { color: var(--text); font-weight: 500; }
+
+/* ── Mobile Edit Shift ── */
+
+/* ── Availability Edit Page ── */
+.mav-edit-page {
+  display: none; position: fixed; inset: 0; z-index: 910;
+  background: var(--gray-bg); flex-direction: column;
+}
+.mav-edit-page.open { display: flex; }
+.mav-edit-body { flex: 1; overflow-y: auto; }
+.mav-edit-section {
+  padding: 14px 18px; background: white;
+  border-bottom: 1px solid rgba(155,125,202,.06);
+}
+.mav-edit-label {
+  font-size: 11px; color: var(--lav-dark); text-transform: uppercase;
+  letter-spacing: .5px; font-weight: 600; margin-bottom: 4px;
+}
+.mav-edit-date { font-size: 16px; font-weight: 600; color: var(--text); }
+.mav-radio-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; cursor: pointer; font-size: 15px; color: var(--text);
+}
+.mav-radio-row input[type="radio"] { display: none; }
+.mav-radio-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid rgba(155,125,202,.3);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .15s;
+}
+.mav-radio-row input[type="radio"]:checked + .mav-radio-dot {
+  border-color: #059669; background: #059669;
+}
+.mav-radio-row input[type="radio"]:checked + .mav-radio-dot::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: white;
+}
+.mav-radio-text { font-weight: 500; }
+.mav-edit-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; background: white;
+  border-bottom: 1px solid rgba(155,125,202,.06);
+  font-size: 15px; font-weight: 500; color: var(--text);
+}
+.mav-toggle {
+  position: relative; width: 46px; height: 26px; display: inline-block;
+}
+.mav-toggle input { opacity: 0; width: 0; height: 0; }
+.mav-toggle-track {
+  position: absolute; inset: 0; background: #ccc; border-radius: 13px;
+  cursor: pointer; transition: .2s;
+}
+.mav-toggle-track::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px; border-radius: 50%; background: white;
+  transition: .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.mav-toggle input:checked + .mav-toggle-track { background: var(--lav-dark); }
+.mav-toggle input:checked + .mav-toggle-track::after { transform: translateX(20px); }
+.mav-time-input {
+  border: 1px solid rgba(155,125,202,.2); border-radius: 8px;
+  padding: 8px 12px; font-size: 15px; font-weight: 600;
+  font-family: 'DM Sans',sans-serif; color: var(--text);
+  background: white; outline: none; flex: 1;
+}
+.mav-time-input:focus { border-color: var(--lav-dark); }
+.mav-note-input {
+  width: 100%; border: none; background: none; font-size: 14px;
+  font-family: 'DM Sans',sans-serif; color: var(--text); outline: none;
+  padding: 4px 0;
+}
+.mav-note-input::placeholder { color: var(--text-light); }
+.mav-edit-hint {
+  padding: 16px 18px; font-size: 13px; color: var(--text-light);
+  line-height: 1.5; background: white;
+  border-bottom: 1px solid rgba(155,125,202,.06);
+}
+.mav-delete-btn {
+  width: 100%; padding: 12px; border: 2px solid #dc2626;
+  border-radius: 10px; background: white; color: #dc2626;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  font-family: 'DM Sans',sans-serif;
+}
+.mav-delete-btn:active { background: #fef2f2; }
+.mob-edit-shift {
+  background: var(--gray-bg); min-height: 100vh; padding-bottom: 70px;
+}
+.mes-content { padding: 0; }
+.mes-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; background: white;
+  border-bottom: 1px solid rgba(155,125,202,.06);
+}
+.mes-icon {
+  width: 28px; font-size: 18px; text-align: center; flex-shrink: 0;
+  color: var(--text-light);
+}
+.mes-field {
+  flex: 1; display: flex; flex-direction: column; gap: 2px;
+}
+.mes-label {
+  font-size: 10px; color: var(--text-light); text-transform: uppercase;
+  letter-spacing: .5px; font-weight: 600;
+}
+.mes-input {
+  border: none; background: none; font-size: 15px; font-weight: 600;
+  color: var(--text); font-family: 'DM Sans', sans-serif; outline: none;
+  padding: 4px 0; width: 100%;
+}
+.mes-input:focus { border-bottom: 2px solid var(--lav-dark); }
+.mes-select {
+  border: none; background: none; font-size: 15px; font-weight: 600;
+  color: var(--text); font-family: 'DM Sans', sans-serif; outline: none;
+  padding: 4px 0; width: 100%; -webkit-appearance: none; appearance: none;
+}
+.mes-textarea {
+  border: none; background: var(--lav-pale); font-size: 14px;
+  color: var(--text); font-family: 'DM Sans', sans-serif; outline: none;
+  padding: 10px 14px; border-radius: 8px; width: 100%; min-height: 80px;
+  resize: none;
+}
+.mes-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; background: white;
+  border-bottom: 1px solid rgba(155,125,202,.06);
+}
+.mes-toggle-label { font-size: 14px; font-weight: 600; color: var(--text); }
 
 /* ── Mobile Send Email ── */
 .mob-sendemail {
@@ -1273,24 +1883,45 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .mob-hours { display: none; }
 @media (max-width: 768px) {
   #view-reports .page-wrapper { display: none; }
-  #view-reports .mob-hours { display: block; padding-bottom: 70px; background: var(--gray-bg); }
+  #view-reports .mob-hours { display: flex; flex-direction: column; min-height: 100vh; padding-bottom: 70px; background: var(--gray-bg); }
 }
 .mob-hours-card {
-  background: white; padding: 16px; border-bottom: 1px solid rgba(155,125,202,.06);
+  background: white; margin: 8px 12px; border-radius: 10px;
+  overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06);
 }
 .mob-hours-week {
-  font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px;
+  padding: 12px 16px; font-weight: 700; font-size: 14px;
+  color: var(--lav-dark); border-bottom: 1px solid rgba(155,125,202,.08);
 }
 .mob-hours-row {
-  display: flex; justify-content: space-between; padding: 4px 0;
+  display: flex; justify-content: space-between; padding: 10px 16px;
   font-size: 13px; color: var(--text-light);
+  border-bottom: 1px solid rgba(155,125,202,.04);
 }
 .mob-hours-row .val { font-weight: 600; color: var(--text); }
 .mob-hours-total {
-  display: flex; justify-content: space-between; padding: 10px 0 0;
-  margin-top: 8px; border-top: 1px solid rgba(155,125,202,.1);
-  font-size: 15px; font-weight: 700; color: var(--text);
+  display: flex; justify-content: space-between; padding: 10px 16px;
+  font-weight: 700; font-size: 14px; color: var(--text);
+  background: var(--lav-pale);
 }
+.mh-empty {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px;
+  padding: 60px 30px; text-align: center;
+}
+.mh-empty-icon { font-size: 48px; color: var(--text-light); opacity: .4; }
+.mh-empty-text { font-size: 14px; color: var(--text-light); line-height: 1.5; }
+.mh-footer {
+  padding: 12px 16px; margin-top: auto;
+  border-top: 1px solid rgba(155,125,202,.08); background: white;
+}
+.mh-find-btn {
+  width: 100%; padding: 14px; border: 2px solid rgba(155,125,202,.2);
+  border-radius: 10px; background: white; color: var(--text);
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.mh-find-btn:active { background: var(--lav-pale); }
 
 /* ── Mobile Config ── */
 .mob-config { display: none; }
@@ -2357,7 +2988,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .vtg-btn.active{background:linear-gradient(135deg,#9470cc,#b8a0e8);color:white;font-weight:700;}
 
 /* ── Only show add-btn on empty cells (JS also gates by role) ── */
-.shift-cell:not(.empty) .hover-add-btn{display:none!important;}
+/* hover-add: empty cells get overlay, non-empty get link */
 
 /* ── Shift context popup ── */
 .shift-popup{position:fixed;z-index:500;background:white;border-radius:14px;box-shadow:0 8px 32px rgba(42,26,94,.22);border:1px solid var(--gray-light);padding:14px;min-width:230px;pointer-events:all;animation:popIn .15s cubic-bezier(.34,1.56,.64,1);}
@@ -3522,6 +4153,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 }
 .os-cell:hover .os-add-plus { color: rgba(180,83,9,.6); }
 .os-cell.os-empty { cursor: pointer; }
+/* Add open shift link for cells with existing open shifts */
+.os-add-link {
+  display: none; padding: 3px 6px; margin-top: 3px;
+  font-size: 10px; color: #b45309; cursor: pointer;
+  border: 1.5px dashed rgba(217,119,6,.3); border-radius: 4px;
+  text-align: center; font-family: 'DM Sans',sans-serif; font-weight: 600;
+  transition: all .12s;
+}
+.os-cell:hover .os-add-link { display: block; }
+.os-add-link:hover { background: rgba(245,158,11,.1); border-color: #d97706; }
 .os-cell.os-empty:hover { background: rgba(245,158,11,.1); }
 
 /* ═══════════════════════════════════════════════
@@ -3603,7 +4244,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .dash-tl-row {
   display: grid; align-items: center;
   border-bottom: 1px solid rgba(155,125,202,.06);
-  min-height: 48px; position: relative;
+  min-height: 48px; position: relative; overflow: visible;
 }
 .dash-tl-row:last-child { border-bottom: none; }
 .dash-tl-row:hover { background: rgba(245,238,248,.3); }
@@ -3620,23 +4261,128 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .dash-tl-name { font-size: 12px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dash-tl-hrs { font-size: 10px; color: var(--text-light); }
 .dash-tl-cells {
-  display: grid; position: relative; height: 100%; min-height: 42px;
+  display: grid; position: relative; height: 100%; min-height: 42px; overflow: visible;
 }
 .dash-tl-cell {
   border-right: 1px solid rgba(155,125,202,.04);
   min-height: 42px;
 }
 .dash-tl-shift {
-  position: absolute; top: 5px; bottom: 5px; min-height: 32px;
-  border-radius: 6px; display: flex; align-items: center;
-  padding: 0 8px; gap: 4px; font-size: 10px; font-weight: 600;
-  color: white; overflow: hidden; white-space: nowrap;
+  position: absolute; top: 4px; bottom: 4px; min-height: 34px;
+  border-radius: 4px; display: flex; align-items: center;
+  padding: 0 10px; gap: 6px; font-size: 11px; font-weight: 500;
+  color: white; overflow: visible; white-space: nowrap;
   cursor: pointer; transition: opacity .15s;
-  text-shadow: 0 1px 2px rgba(0,0,0,.2);
-  box-shadow: 0 1px 4px rgba(0,0,0,.12);
+  text-shadow: 0 1px 2px rgba(0,0,0,.25);
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+  z-index: 2;
 }
 .dash-tl-shift:hover { opacity: .88; }
 .dash-tl-shift-text { overflow: hidden; text-overflow: ellipsis; }
+.dash-tl-shift-text b { font-weight: 800; }
+/* Hover tag */
+.dtl-hover-tag {
+  display: none; position: absolute; top: -24px; left: 50%;
+  transform: translateX(-50%); background: rgba(61,26,92,.9);
+  color: white; font-size: 10px; font-weight: 700; letter-spacing: .5px;
+  padding: 4px 10px; border-radius: 4px; white-space: nowrap;
+  cursor: pointer; z-index: 5;
+}
+.dtl-hover-tag::after {
+  content: ''; position: absolute; bottom: -4px; left: 50%;
+  transform: translateX(-50%); border-left: 5px solid transparent;
+  border-right: 5px solid transparent; border-top: 5px solid rgba(61,26,92,.9);
+}
+.dash-tl-shift:hover .dtl-hover-tag { display: block; }
+/* Shift popover */
+.dtl-popover {
+  position: fixed; z-index: 600; width: 280px;
+  background: #1a1a2e; color: white; border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.35);
+  font-family: 'DM Sans',sans-serif;
+  animation: popIn .15s ease;
+}
+@keyframes popIn { from { opacity: 0; transform: scale(.95); } to { opacity: 1; transform: scale(1); } }
+.dtl-pop-header {
+  padding: 14px 16px 10px; border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.dtl-pop-time {
+  font-size: 16px; font-weight: 800; color: #c8860a;
+}
+.dtl-pop-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 16px; font-size: 12px; color: rgba(255,255,255,.8);
+}
+.dtl-pop-icon { font-size: 14px; width: 18px; text-align: center; }
+.dtl-pop-notes {
+  padding: 8px 16px; font-size: 11px; color: rgba(255,255,255,.6);
+  line-height: 1.4; border-top: 1px solid rgba(255,255,255,.08);
+}
+.dtl-pop-footer {
+  padding: 10px 16px; display: flex; gap: 8px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.dtl-pop-btn {
+  flex: 1; padding: 8px; border-radius: 6px; border: none;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  font-family: 'DM Sans',sans-serif;
+}
+.dtl-pop-btn.primary { background: var(--lav-dark); color: white; }
+.dtl-pop-btn.ghost { background: rgba(255,255,255,.1); color: white; }
+.dtl-pop-btn:active { opacity: .8; }
+/* ── Shift Detail Popup (VIEW DETAILS click) ── */
+.sdp-overlay {
+  display: none; position: fixed; inset: 0; z-index: 700;
+  background: rgba(0,0,0,.4); align-items: flex-start; justify-content: center;
+  padding-top: 80px;
+}
+.sdp-overlay.open { display: flex; }
+.sdp-box {
+  background: white; border-radius: 12px; width: 420px; max-width: 95vw;
+  box-shadow: 0 12px 40px rgba(0,0,0,.25); animation: popIn .15s ease;
+  overflow: hidden;
+}
+.sdp-header {
+  display: flex; gap: 16px; padding: 20px 22px 16px;
+  border-bottom: 1px solid rgba(155,125,202,.08);
+}
+.sdp-date-badge {
+  background: var(--lav-dark); color: white; border-radius: 8px;
+  padding: 6px 12px; text-align: center; flex-shrink: 0;
+  min-width: 50px;
+}
+.sdp-date-day { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+.sdp-date-num { font-size: 22px; font-weight: 800; line-height: 1.1; }
+.sdp-header-info { flex: 1; }
+.sdp-time { font-size: 18px; font-weight: 700; color: var(--text); }
+.sdp-subtitle { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+.sdp-close {
+  font-size: 18px; cursor: pointer; color: var(--text-light);
+  align-self: flex-start; padding: 2px 6px;
+}
+.sdp-close:hover { color: var(--text); }
+.sdp-body { padding: 16px 22px; }
+.sdp-field { margin-bottom: 14px; }
+.sdp-field-label {
+  font-size: 11px; color: var(--text-light); text-transform: uppercase;
+  letter-spacing: .5px; font-weight: 600; margin-bottom: 3px;
+}
+.sdp-field-value { font-size: 15px; font-weight: 600; color: var(--text); }
+.sdp-notes-box {
+  background: var(--lav-pale); padding: 12px 14px; border-radius: 8px;
+  font-size: 13px; color: var(--text); line-height: 1.5;
+}
+.sdp-footer {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding: 14px 22px; border-top: 1px solid rgba(155,125,202,.08);
+}
+.sdp-btn {
+  padding: 8px 18px; border-radius: 6px; font-size: 13px;
+  font-weight: 600; cursor: pointer; font-family: 'DM Sans',sans-serif;
+  border: 1.5px solid rgba(155,125,202,.2); background: white; color: var(--text);
+}
+.sdp-btn:hover { background: var(--lav-pale); }
+.sdp-btn:active { opacity: .8; }
 .dash-tl-empty {
   text-align: center; padding: 32px; color: var(--text-light);
   font-size: 14px; font-style: italic;
@@ -3652,6 +4398,179 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   content: ''; position: absolute; top: -3px; left: -4px;
   width: 10px; height: 10px; border-radius: 50%;
   background: #dc2626;
+}
+
+/* ── Timesheet Detail (WhenIWork style) ── */
+.ts-detail-view { margin-top: -10px; }
+.tsd-layout { display: flex; gap: 0; min-height: 500px; }
+.tsd-sidebar {
+  width: 240px; min-width: 240px; padding: 16px;
+  border-right: 1px solid rgba(155,125,202,.1);
+}
+.tsd-sec-title {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 8px;
+}
+.tsd-dots { cursor: pointer; font-size: 16px; color: var(--text-light); }
+.tsd-period-sel {
+  padding: 8px 12px; border: 1.5px solid rgba(155,125,202,.15);
+  border-radius: 8px; font-size: 13px; color: var(--text); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.tsd-period-sel::before { content: '○'; color: var(--text-light); }
+.tsd-close-btn {
+  width: 100%; padding: 8px; border: 1.5px solid rgba(155,125,202,.15);
+  border-radius: 8px; background: white; font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: 'DM Sans',sans-serif; color: var(--text);
+}
+.tsd-close-btn:hover { background: var(--lav-pale); }
+.tsd-select {
+  width: 100%; padding: 8px 12px; border: 1.5px solid rgba(155,125,202,.15);
+  border-radius: 8px; font-size: 13px; font-family: 'DM Sans',sans-serif;
+  color: var(--text-light); margin-bottom: 12px;
+}
+.tsd-export { font-size: 12px; color: var(--text-light); cursor: pointer; font-weight: 500; }
+.tsd-search {
+  width: 100%; padding: 8px 12px; border: 1.5px solid rgba(155,125,202,.15);
+  border-radius: 8px; font-size: 13px; font-family: 'DM Sans',sans-serif;
+  margin-bottom: 10px; outline: none;
+}
+.tsd-search:focus { border-color: var(--lav); }
+.tsd-staff-list { max-height: 300px; overflow-y: auto; }
+.tsd-staff-row {
+  display: flex; align-items: center; gap: 8px; padding: 7px 4px;
+  cursor: pointer; border-radius: 6px; font-size: 13px; color: var(--text);
+}
+.tsd-staff-row:hover { background: var(--lav-pale); }
+.tsd-staff-row.active { background: var(--lav-pale); font-weight: 700; }
+.tsd-staff-av {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: white; flex-shrink: 0;
+}
+.tsd-staff-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tsd-staff-warn { color: var(--gold-dark); font-size: 14px; }
+.tsd-main { flex: 1; padding: 16px 20px; }
+.tsd-main-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.tsd-back {
+  font-size: 12px; color: var(--lav-dark); cursor: pointer; font-weight: 600;
+  margin-bottom: 4px; display: inline-block;
+}
+.tsd-back:hover { text-decoration: underline; }
+.tsd-emp-name {
+  font-family: 'Playfair Display',serif; font-size: 22px; font-weight: 700;
+  color: var(--text); margin: 0;
+}
+.tsd-actions { display: flex; align-items: center; gap: 8px; }
+.tsd-approve-btn {
+  padding: 8px 20px; border: none; border-radius: 6px;
+  background: var(--gold-dark); color: white; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: 'DM Sans',sans-serif;
+}
+.tsd-approve-btn:hover { opacity: .9; }
+.tsd-show-shifts-btn {
+  padding: 8px 16px; border: 1.5px solid rgba(155,125,202,.2);
+  border-radius: 6px; background: white; font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: 'DM Sans',sans-serif; color: var(--text);
+}
+.tsd-hour-tabs {
+  display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(155,125,202,.1);
+  margin-bottom: 12px; flex-wrap: wrap;
+}
+.tsd-htab { font-size: 12px; color: var(--text-light); }
+.tsd-htab b { margin-left: 2px; color: var(--text); }
+.tsd-table { border: 1.5px solid rgba(100,70,150,.25); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; max-height: 520px; }
+.tsd-table-hd { flex-shrink: 0; }
+.tsd-table-scroll { flex: 1; overflow-y: auto; }
+.tsd-table-scroll::-webkit-scrollbar { width: 6px; }
+.tsd-table-scroll::-webkit-scrollbar-track { background: transparent; }
+.tsd-table-scroll::-webkit-scrollbar-thumb { background: rgba(100,70,150,.2); border-radius: 3px; }
+.tsd-table-scroll::-webkit-scrollbar-thumb:hover { background: rgba(100,70,150,.4); }
+.tsd-table-hd {
+  display: grid; grid-template-columns: 150px 80px 80px 70px 1fr 90px 90px 100px;
+  background: var(--lav-dark); color: white; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.tsd-table-hd span { padding: 10px 12px; border-right: 1px solid rgba(255,255,255,.15); }
+.tsd-table-hd span:last-child { border-right: none; }
+.tsd-table-row {
+  display: grid; grid-template-columns: 150px 80px 80px 70px 1fr 90px 90px 100px;
+  border-bottom: 1.5px solid rgba(100,70,150,.15); font-size: 13px;
+  min-height: 48px; align-items: stretch;
+}
+.tsd-table-row:last-child { border-bottom: none; }
+.tsd-table-row:hover { background: rgba(245,238,248,.3); }
+.tsd-table-row > span { padding: 10px 12px; border-right: 1px solid rgba(100,70,150,.08); display: flex; align-items: center; }
+.tsd-table-row > span:last-child { border-right: none; }
+.tsd-col-day { font-weight: 600; color: var(--text); }
+.tsd-table-total {
+  display: grid; grid-template-columns: 150px 80px 80px 70px 1fr 90px 90px 100px;
+  font-size: 13px; font-weight: 700; background: var(--lav-pale);
+  border-top: 2.5px solid rgba(100,70,150,.3); flex-shrink: 0;
+}
+.tsd-table-total span { padding: 10px 12px; border-right: 1px solid rgba(100,70,150,.08); }
+.tsd-table-total span:last-child { border-right: none; }
+/* Editable time inputs */
+.tsd-editable { padding: 0 !important; }
+.tsd-time-input {
+  width: 100%; border: none; background: transparent; padding: 10px 12px;
+  font-size: 13px; font-family: 'DM Sans',sans-serif; color: var(--text);
+  outline: none; cursor: text;
+}
+.tsd-time-input:focus { background: rgba(200,134,10,.08); }
+.tsd-time-input::placeholder { color: rgba(100,70,150,.2); }
+.tsd-total-cell { font-weight: 600; color: var(--text); }
+/* Detail pills in row */
+.tsd-details-cell {
+  display: flex; flex-direction: column; gap: 4px; padding: 8px 12px !important;
+  align-items: flex-start !important;
+}
+.tsd-details-cell > div { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.tsd-detail-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600;
+  background: rgba(155,125,202,.12); color: var(--lav-dark); white-space: nowrap;
+}
+.tsd-detail-pill.site { background: rgba(200,134,10,.12); color: var(--gold-dark); }
+.tsd-detail-text { font-size: 11px; color: var(--text-light); white-space: nowrap; }
+/* Difference colors */
+.tsd-positive { color: #059669; font-weight: 600; }
+.tsd-negative { color: #dc2626; font-weight: 600; }
+/* Row action icons */
+.tsd-row-actions {
+  display: flex; gap: 4px; margin-top: 4px;
+}
+.tsd-action-icon {
+  width: 26px; height: 26px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; cursor: pointer; border: 1.5px solid rgba(100,70,150,.15);
+  background: white; transition: all .12s;
+}
+.tsd-action-icon:hover { background: var(--lav-pale); border-color: var(--lav); }
+/* Note display */
+.tsd-note-display {
+  font-size: 11px; color: var(--text-light); margin-top: 3px;
+  padding: 3px 6px; background: rgba(200,134,10,.08); border-radius: 4px;
+  max-width: 100%;
+}
+/* Add plus button */
+.tsd-add-plus {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid rgba(155,125,202,.25); color: var(--lav-dark);
+  font-size: 14px; cursor: pointer; margin-left: 6px; line-height: 1;
+  vertical-align: middle;
+}
+.tsd-add-plus:hover { background: var(--lav-pale); border-color: var(--lav); }
+/* Row with data highlight */
+.tsd-table-row.has-data { background: rgba(245,238,248,.15); }
+@media(max-width:900px) {
+  .tsd-layout { flex-direction: column; }
+  .tsd-sidebar { width: 100%; min-width: 0; border-right: none; border-bottom: 1px solid rgba(155,125,202,.1); }
+  .tsd-table-hd, .tsd-table-row, .tsd-table-total { grid-template-columns: 110px 65px 65px 55px 1fr 70px 70px 80px; font-size: 11px; }
 }
 
 /* ── Attendance Notices ── */
@@ -4106,7 +5025,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   font-size: 9px; font-weight: 700; color: white; flex-shrink: 0;
 }
 .sched-user-name { flex: 1; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#view-scheduler .sched-main-area { flex: 1; min-width: 0; overflow-x: auto; }
+#view-scheduler .sched-main-area { flex: 1; min-width: 0; overflow-x: auto; background: white; }
 #view-scheduler .sched-left-toggle {
   display: none; position: absolute; top: 8px; left: 8px; z-index: 5;
   background: white; border: 1.5px solid rgba(155,125,202,.2);
@@ -5711,9 +6630,29 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   /* border-top + background set inline */
 }
 
+/* ── Lock to Portrait on Mobile ── */
+@media (max-height: 500px) and (max-width: 950px) and (orientation: landscape) {
+  #app, #loginScreen { display: none !important; }
+  .landscape-block { display: flex !important; }
+}
+.landscape-block {
+  display: none; position: fixed; inset: 0; z-index: 99999;
+  background: linear-gradient(135deg,#3D1A5C,#6B4FA0);
+  color: white; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px;
+  font-family: 'DM Sans', sans-serif; text-align: center; padding: 20px;
+}
+.landscape-block .lb-icon { font-size: 48px; }
+.landscape-block .lb-text { font-size: 16px; font-weight: 600; }
+.landscape-block .lb-sub { font-size: 12px; opacity: 0.7; }
 </style>
 </head>
 <body>
+<div class="landscape-block">
+  <div class="lb-icon">📱</div>
+  <div class="lb-text">Please rotate your device</div>
+  <div class="lb-sub">ADLP Scheduler works best in portrait mode</div>
+</div>
 
 <!-- ════════ LOGIN ════════ -->
 <div id="loginScreen">
@@ -5786,7 +6725,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
     <nav class="header-nav" id="headerNav">
       <button class="nav-btn active" onclick="switchView('schedule',this)">📅 Dashboard</button>
       <button class="nav-btn" onclick="switchView('scheduler',this)" id="schedulerNavBtn" style="display:none">🗓 Scheduler</button>
-      <button class="nav-btn" onclick="switchView('timesheets',this)" id="attendanceNavBtn">🕐 Attendance</button>
+      <div class="nav-dd-wrap" style="position:relative">
+        <button class="nav-btn" onclick="toggleAttDropdown(event)" id="attendanceNavBtn">🕐 Attendance ▾</button>
+        <div class="nav-dropdown" id="attDropdown" style="display:none">
+          <div class="nav-dd-item" onclick="switchView('timesheets',document.getElementById('attendanceNavBtn'));closeAttDropdown();setTimeout(()=>{const staff=getStaff().filter(s=>s.status==='active');if(staff.length)openTsDetail(staff[0].id);},100)">
+            <span class="nav-dd-icon">📋</span> Timesheets
+          </div>
+          <div class="nav-dd-item" onclick="switchView('tracker',document.getElementById('attendanceNavBtn'));closeAttDropdown()">
+            <span class="nav-dd-icon">🕐</span> Time Tracker
+          </div>
+          <div class="nav-dd-item" onclick="switchView('terminal',document.getElementById('attendanceNavBtn'));closeAttDropdown()">
+            <span class="nav-dd-icon">🖥</span> Lock as Terminal
+          </div>
+        </div>
+      </div>
       <button class="nav-btn" onclick="switchView('staff',this)" id="staffNavBtn">👥 Staff</button>
       <button class="nav-btn" onclick="switchView('reports',this)">📊 Reports</button>
       <button class="nav-btn" onclick="switchView('workchat',this)" style="background:linear-gradient(135deg,rgba(155,125,202,.25),rgba(155,125,202,.1));border:1px solid rgba(155,125,202,.4);">💬 WorkChat</button>
@@ -5795,6 +6747,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
     </nav>
     <div class="header-right">
       <button class="add-shift-btn" id="addShiftBtn" onclick="openAddShiftModal()">+ Add Shift</button>
+      <!-- Notification Bell -->
+      <div style="position:relative" id="notifBellWrap">
+        <button class="hdr-notif-btn" onclick="toggleNotifPanel(event)" title="Notifications">🔔
+          <span class="notif-badge" id="notifBadge">3</span>
+        </button>
+        <div class="notif-panel" id="notifPanel" style="display:none">
+          <div class="notif-panel-hd">
+            <span style="font-weight:700">Notifications</span>
+            <span class="notif-mark-read" onclick="markAllNotifsRead()">Mark all read</span>
+          </div>
+          <div class="notif-panel-body" id="notifPanelBody"></div>
+        </div>
+      </div>
       <!-- Quick Actions Dropdown -->
       <div style="position:relative" id="quickActionsWrap">
         <button class="hdr-dots-btn" onclick="toggleQuickActions(event)" title="More actions">⋮</button>
@@ -5945,7 +6910,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
             <div class="dash-sec-hd">
               <h2 class="dash-sec-title">Today's Schedule</h2>
               <div class="dash-sec-actions">
-                <button class="dash-btn-outline" onclick="switchView('scheduler',document.getElementById('schedulerNavBtn'))">Full Scheduler</button>
+                <button class="dash-btn-outline" onclick="openTaskListModal()">Task Lists</button>
                 <button class="dash-btn-outline" onclick="exportScheduleCSV()">Calendar Sync</button>
               </div>
             </div>
@@ -6304,7 +7269,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
             <span class="ms-title">ADLP</span>
             <div class="ms-header-icons">
               <span class="ms-hdr-icon" onclick="mobSchedToggleView('cal')">📅</span>
-              <span class="ms-hdr-icon" onclick="mobSchedToggleView('list')">📋</span>
+              <span class="ms-hdr-icon" onclick="toggleMobFilters()" id="msFilterIcon">☰</span>
             </div>
           </div>
           <!-- Tabs -->
@@ -6315,6 +7280,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
           </div>
           <!-- Week strip -->
           <div class="ms-week-strip" id="msWeekStrip"></div>
+          <!-- Calendar dropdown -->
+          <div class="ms-cal-dropdown" id="msCalDropdown">
+            <div class="ms-cal-header">
+              <span class="ms-cal-arrow" onclick="mobCalNav(-1)">◀</span>
+              <span class="ms-cal-month" id="msCalMonth"></span>
+              <span class="ms-cal-arrow" onclick="mobCalNav(1)">▶</span>
+            </div>
+            <div class="ms-cal-days">
+              <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div class="ms-cal-grid" id="msCalGrid"></div>
+          </div>
+          <!-- Mobile Filter Panel -->
+          <div class="ms-filter-panel" id="msFilterPanel">
+            <div class="msf-header">
+              <span style="font-size:20px;cursor:pointer" onclick="toggleMobFilters()">←</span>
+              <span class="msf-title" style="flex:1">Filters</span>
+            </div>
+            <div class="msf-body" id="msfBody"></div>
+            <div class="msf-footer">
+              <span class="msf-reset-link" id="msfResetLink" onclick="resetMobFilters()" style="display:none">Reset Filters</span>
+              <button class="msf-apply-btn" onclick="toggleMobFilters()">Apply Filters</button>
+            </div>
+          </div>
           <!-- Day content -->
           <div class="ms-day-content" id="msDayContent"></div>
           <!-- Total hours -->
@@ -6424,9 +7413,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
         <div class="mob-hours" id="mobHours">
           <div class="ms-header" style="justify-content:flex-start;gap:12px">
             <span style="font-size:20px;cursor:pointer" onclick="mobNav('more')">←</span>
-            <span class="ms-title">My Hours</span>
+            <span class="ms-title" style="flex:1">My Hours</span>
           </div>
           <div id="mobHoursContent"></div>
+          <div class="mh-footer">
+            <button class="mh-find-btn" onclick="mobNav('timesheets')">Find More Hours</button>
+          </div>
         </div>
       </div>
 
@@ -7245,6 +8237,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
       <!-- ══ TIMESHEETS VIEW ══ -->
       <div class="view" id="view-timesheets">
         <div class="page-wrapper">
+          <!-- Old Summary View (hidden by default, shown via "Back to Summary") -->
+          <div id="tsSummaryView" style="display:none">
           <div class="page-header" style="margin-bottom:14px">
             <div class="page-title">🕐 Timesheets</div>
             <div style="display:flex;gap:8px">
@@ -7297,6 +8291,67 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 
           <!-- Employee rows -->
           <div id="tsGrid"></div>
+          </div><!-- end tsSummaryView -->
+
+          <!-- ══ Individual Timesheet Detail (WhenIWork style) ══ -->
+          <div class="ts-detail-view" id="tsDetailView" style="display:none">
+            <div class="tsd-layout">
+              <!-- Left sidebar -->
+              <div class="tsd-sidebar">
+                <div class="tsd-sec-title">Pay Period <span class="tsd-dots">⋮</span></div>
+                <div class="tsd-period-sel" id="tsdPeriodLabel">Feb 26 - Mar 11, 2026</div>
+                <button class="tsd-close-btn" onclick="closeTsDetailPeriod()">Close Period</button>
+
+                <div class="tsd-sec-title" style="margin-top:18px">Schedule</div>
+                <select class="tsd-select" id="tsdSchedSelect"><option>Select...</option></select>
+
+                <div class="tsd-sec-title" style="margin-top:18px">Timesheets <span class="tsd-export" onclick="exportTimesheetCSV()">Export ▾</span></div>
+                <input type="text" class="tsd-search" id="tsdStaffSearch" placeholder="Start typing..." oninput="filterTsdStaff(this.value)">
+                <div class="tsd-staff-list" id="tsdStaffList"></div>
+              </div>
+
+              <!-- Main content -->
+              <div class="tsd-main">
+                <div class="tsd-main-header">
+                  <div>
+                    <span class="tsd-back" onclick="closeTsDetail()">← Back</span>
+                    <h2 class="tsd-emp-name" id="tsdEmpName">Employee Name</h2>
+                  </div>
+                  <div class="tsd-actions">
+                    <button class="tsd-approve-btn" onclick="approveTsdTimesheet()">Approve</button>
+                    <button class="tsd-show-shifts-btn" onclick="showToast('📋 Show shifts')">Show Shifts</button>
+                    <span style="cursor:pointer;font-size:18px" onclick="showToast('🖨 Print')">🖨</span>
+                  </div>
+                </div>
+
+                <!-- Hour breakdown tabs -->
+                <div class="tsd-hour-tabs" id="tsdHourTabs">
+                  <span class="tsd-htab">Regular <b id="tsdRegHrs">0</b></span>
+                  <span class="tsd-htab">Overtime <b id="tsdOtHrs">0</b></span>
+                  <span class="tsd-htab">Double OT <b>0</b></span>
+                  <span class="tsd-htab">Time Off <b>0</b></span>
+                  <span class="tsd-htab">Paid Total <b id="tsdPaidTotal">0</b></span>
+                  <span class="tsd-htab">Scheduled vs. Worked <b id="tsdSchedVsWork">0</b></span>
+                </div>
+
+                <!-- Day table -->
+                <div class="tsd-table">
+                  <div class="tsd-table-hd">
+                    <span class="tsd-col-day">Day</span>
+                    <span class="tsd-col">In</span>
+                    <span class="tsd-col">Out</span>
+                    <span class="tsd-col">Total</span>
+                    <span class="tsd-col-details">Details</span>
+                    <span class="tsd-col">Worked</span>
+                    <span class="tsd-col">Scheduled</span>
+                    <span class="tsd-col">Difference</span>
+                  </div>
+                  <div class="tsd-table-scroll" id="tsdTableBody"></div>
+                  <div class="tsd-table-total" id="tsdTableTotal"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- ══ MOBILE ATTENDANCE - Pay Periods ══ -->
@@ -7526,6 +8581,57 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
         </div>
       </div>
 
+      <!-- ══ SHIFT DETAIL VIEW (mobile) ══ -->
+      <div class="view" id="view-shiftdetail">
+        <div class="mob-shift-detail" id="mobShiftDetail">
+          <div class="ms-header" style="justify-content:flex-start;gap:12px">
+            <span style="font-size:20px;cursor:pointer" onclick="mobNav('scheduler')">←</span>
+            <span class="ms-title" id="msdHeaderDate" style="flex:1">Shift Detail</span>
+            <span style="font-size:20px;cursor:pointer" onclick="openMobEditShift(mobShiftDetailId)">✏️</span>
+            <span style="font-size:20px;cursor:pointer" onclick="if(confirm('Delete this shift?')){deleteShift(mobShiftDetailId);mobNav('scheduler');}">🗑️</span>
+          </div>
+          <div class="msd-content" id="msdContent"></div>
+        </div>
+      </div>
+
+      <!-- ══ AVAILABILITY VIEW (mobile) ══ -->
+      <div class="view" id="view-availability">
+        <div class="mob-avail-page">
+          <div class="ms-header" style="justify-content:flex-start;gap:12px">
+            <span style="font-size:20px;cursor:pointer" onclick="mobNav('more')">←</span>
+            <span class="ms-title" style="flex:1">Availability</span>
+            <span style="font-size:18px;cursor:pointer" onclick="mobAvailToggleCal()">📅</span>
+            <span style="font-size:18px;cursor:pointer" onclick="showToast('🗑 Clear availability coming soon')">🗑️</span>
+          </div>
+          <!-- Availability Calendar -->
+          <div class="mav-cal" id="mavCal">
+            <div class="mav-cal-header">
+              <span class="mav-cal-arrow" onclick="mobAvailNavMonth(-1)">‹</span>
+              <span class="mav-cal-month" id="mavCalMonth"></span>
+              <span class="mav-cal-arrow" onclick="mobAvailNavMonth(1)">›</span>
+            </div>
+            <div class="mav-cal-days">
+              <span>T</span><span>F</span><span>S</span><span>S</span><span>M</span><span>T</span><span>W</span>
+            </div>
+            <div class="mav-cal-grid" id="mavCalGrid"></div>
+          </div>
+          <!-- Day list -->
+          <div class="mav-day-list" id="mavDayList"></div>
+        </div>
+      </div>
+
+      <!-- ══ EDIT SHIFT VIEW (mobile) ══ -->
+      <div class="view" id="view-mobedishift">
+        <div class="mob-edit-shift">
+          <div class="ms-header" style="justify-content:flex-start;gap:12px">
+            <span style="font-size:20px;cursor:pointer" onclick="openMobShiftDetail(mobEditShiftId)">←</span>
+            <span class="ms-title" style="flex:1">Edit Shift</span>
+            <span style="font-size:20px;cursor:pointer;color:#c8860a" onclick="saveMobEditShift()">✓</span>
+          </div>
+          <div class="mes-content" id="mesContent"></div>
+        </div>
+      </div>
+
       <!-- ══ SEND EMAIL VIEW ══ -->
       <div class="view" id="view-sendemail">
         <div class="mob-sendemail">
@@ -7562,7 +8668,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
           <div class="mob-more-item" onclick="mobNav('profile')">
             <span class="mob-more-icon">👤</span> Profile & Settings
           </div>
-          <div class="mob-more-item" onclick="mobNav('profile');setTimeout(()=>{setMobProfTab('avail',document.getElementById('mpTabAlerts'));},50)">
+          <div class="mob-more-item" onclick="openMobAvailability()">
             <span class="mob-more-icon">📅</span> Availability
           </div>
           <div class="mob-more-item" onclick="mobNav('reports')">
@@ -8424,7 +9530,60 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   </div>
 </div>
 
+<div class="sdp-overlay" id="sdpOverlay" onclick="if(event.target===this)closeShiftDetailPopup()">
+  <div class="sdp-box" id="sdpBox"></div>
+</div>
+<div class="dtl-popover" id="dtlPopover" style="display:none"></div>
 <div class="toast" id="toast"></div>
+
+<!-- Task Lists Modal -->
+<div class="modal-overlay" id="taskListModal">
+  <div class="modal" style="width:560px;max-width:95vw;padding:0">
+    <div class="tl-modal-header">
+      <div class="tl-modal-title" id="tlModalTitle">Tasks for Today</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="tl-create-btn" onclick="createNewTaskList()">+ Create new list</span>
+        <span style="cursor:pointer;font-size:18px;color:var(--text-light)" onclick="closeModal('taskListModal')">✕</span>
+      </div>
+    </div>
+    <div class="tl-tabs">
+      <button class="tl-tab active" id="tlTabTeam" onclick="setTlTab('team',this)">Team Tasks</button>
+      <button class="tl-tab" id="tlTabShift" onclick="setTlTab('shift',this)">Shift Tasks</button>
+    </div>
+    <div class="tl-body" id="tlBody">
+      <div class="tl-empty" id="tlEmpty">
+        <p>No team task lists for today.</p>
+        <p>Schedule task lists from <span style="color:var(--lav-dark);cursor:pointer;font-weight:600" onclick="closeModal('taskListModal');showToast('📋 Opening Tasks page')">Tasks</span> page<br>or the side panel on the scheduler.</p>
+      </div>
+      <div class="tl-list" id="tlList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- New Task List Wizard -->
+<div class="modal-overlay" id="newTaskListWizard">
+  <div class="modal" style="width:700px;max-width:95vw;padding:0;display:flex;min-height:400px">
+    <div class="ntl-sidebar">
+      <div class="ntl-sidebar-title">New Task List</div>
+      <div class="ntl-steps">
+        <div class="ntl-step"><span class="ntl-step-num active">1</span> Type</div>
+        <div class="ntl-step"><span class="ntl-step-num">2</span> Name</div>
+        <div class="ntl-step"><span class="ntl-step-num">3</span> Tasks</div>
+      </div>
+    </div>
+    <div class="ntl-main">
+      <div class="ntl-main-header">
+        <span></span>
+        <span style="cursor:pointer;font-size:18px;color:var(--text-light)" onclick="closeModal('newTaskListWizard')">✕</span>
+      </div>
+      <div class="ntl-body" id="ntlBody"></div>
+      <div class="ntl-footer">
+        <button class="ntl-back-btn" onclick="ntlBack()">← Back</button>
+        <button class="ntl-continue-btn" id="ntlContinueBtn" onclick="ntlNext()">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ══════════════════════════════════════
@@ -9879,6 +11038,9 @@ function renderSchedule(){
           ${canEdit?`<span class="sb-del" onclick="event.stopPropagation();confirmDel('${sh.id}')">✕</span>`:''}
         </div>`;
       });
+      if (dayShifts.length > 0 && canAddShift) {
+        bHtml += `<div class="add-shift-link" onclick="event.stopPropagation();openAddShiftModal('${s.id}','${ds}')">+ Add a shift</div>`;
+      }
       bHtml+='</div>';
     });
     bHtml+='</div>';
@@ -11778,6 +12940,371 @@ function sidebarGo(view,el){
 // ══════════════════════════════════════
 //  TOAST
 // ══════════════════════════════════════
+// ── Shift Hover Popover ──
+let popoverHideTimer = null;
+
+function showShiftHoverPop(shiftId, e) {
+  clearTimeout(popoverHideTimer);
+  const data = window._shiftPopData && window._shiftPopData[shiftId];
+  if (!data) return;
+
+  const pop = document.getElementById('dtlPopover');
+  pop.innerHTML = `
+    <div class="dtl-pop-header">
+      <div class="dtl-pop-time">${data.time}</div>
+    </div>
+    <div class="dtl-pop-row"><span class="dtl-pop-icon">👤</span> ${data.position}</div>
+    <div class="dtl-pop-row"><span class="dtl-pop-icon">📍</span> ${data.site}</div>
+    <div class="dtl-pop-row"><span class="dtl-pop-icon">✅</span> ${data.tasks} tasks available</div>
+    ${data.notes ? '<div class="dtl-pop-notes">' + data.notes + '</div>' : ''}
+  `;
+
+  const rect = e.currentTarget.getBoundingClientRect();
+  let top = rect.bottom + 8;
+  let left = rect.left;
+  if (top + 200 > window.innerHeight) top = rect.top - 210;
+  if (left + 280 > window.innerWidth) left = window.innerWidth - 290;
+  if (left < 10) left = 10;
+
+  pop.style.top = top + 'px';
+  pop.style.left = left + 'px';
+  pop.style.display = 'block';
+}
+
+function scheduleHidePopover() {
+  popoverHideTimer = setTimeout(hideShiftPopover, 300);
+}
+
+function hideShiftPopover() {
+  const pop = document.getElementById('dtlPopover');
+  if (pop) pop.style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const pop = document.getElementById('dtlPopover');
+  if (pop) {
+    pop.addEventListener('mouseenter', () => clearTimeout(popoverHideTimer));
+    pop.addEventListener('mouseleave', scheduleHidePopover);
+  }
+});
+
+// ── Shift Detail Popup (VIEW DETAILS click) ──
+function openShiftDetailPopup(shiftId) {
+  hideShiftPopover();
+  const shifts = getShifts();
+  const sh = shifts.find(s => s.id === shiftId);
+  if (!sh) return;
+
+  const staff = getStaff();
+  const s = staff.find(x => x.id === sh.staffId);
+  const pos = sh.position || (s ? s.title : '') || 'Direct Support Professional';
+  const site = sh.jobSite || sh.site || sh.location || '';
+  const dept = sh.dept || 'ADLP';
+  const notes = sh.notes || '';
+
+  const d = parseDate(sh.date);
+  const dayNames = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const fmtT2 = t => { if(!t) return ''; const [h,m]=t.split(':').map(Number); const ap=h>=12?'p':'a'; return `${h===0?12:h>12?h-12:h}:${String(m).padStart(2,'0')}${ap}`; };
+
+  let html = `
+    <div class="sdp-header">
+      <div class="sdp-date-badge">
+        <div class="sdp-date-day">${dayNames[d.getDay()]}</div>
+        <div class="sdp-date-num">${d.getDate()}</div>
+      </div>
+      <div class="sdp-header-info">
+        <div class="sdp-time">${fmtT2(sh.start)} – ${fmtT2(sh.end)}</div>
+        <div class="sdp-subtitle">at ${dept} as ${pos}</div>
+      </div>
+      <span class="sdp-close" onclick="closeShiftDetailPopup()">✕</span>
+    </div>
+    <div class="sdp-body">
+      <div class="sdp-field">
+        <div class="sdp-field-label">Schedule</div>
+        <div class="sdp-field-value">${dept}</div>
+      </div>
+      ${site ? `<div class="sdp-field">
+        <div class="sdp-field-label">Job Site</div>
+        <div class="sdp-field-value">${site}</div>
+      </div>` : ''}
+      ${notes ? `<div class="sdp-field">
+        <div class="sdp-field-label">Notes</div>
+        <div class="sdp-notes-box">${notes.toUpperCase()}</div>
+      </div>` : ''}
+    </div>
+    <div class="sdp-footer">
+      <button class="sdp-btn" onclick="closeShiftDetailPopup();editShift('${shiftId}')">Move to Open</button>
+      <button class="sdp-btn" onclick="closeShiftDetailPopup();editShift('${shiftId}')">Edit Shift</button>
+    </div>
+  `;
+
+  document.getElementById('sdpBox').innerHTML = html;
+  document.getElementById('sdpOverlay').classList.add('open');
+}
+
+function closeShiftDetailPopup() {
+  document.getElementById('sdpOverlay').classList.remove('open');
+}
+
+// ── Task Lists Modal ──
+let tlCurrentTab = 'team';
+
+function openTaskListModal() {
+  const today = new Date(TODAY);
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.getElementById('tlModalTitle').textContent = 'Tasks for ' + dayNames[today.getDay()] + ' ' + today.getDate();
+  tlCurrentTab = 'team';
+  document.querySelectorAll('.tl-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tlTabTeam').classList.add('active');
+  renderTaskListBody();
+  openModal('taskListModal');
+}
+
+function setTlTab(tab, btn) {
+  tlCurrentTab = tab;
+  document.querySelectorAll('.tl-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderTaskListBody();
+}
+
+function renderTaskListBody() {
+  const todayStr = dateStr(new Date(TODAY));
+  const taskLists = DB.get('taskLists') || [];
+  const tasks = taskLists.filter(t => t.type === tlCurrentTab && t.date === todayStr);
+
+  const emptyEl = document.getElementById('tlEmpty');
+  const listEl = document.getElementById('tlList');
+
+  if (tasks.length === 0) {
+    const tabName = tlCurrentTab === 'team' ? 'team' : 'shift';
+    emptyEl.innerHTML = `<p>No ${tabName} task lists for today.</p><p>Schedule task lists from <span style="color:var(--lav-dark);cursor:pointer;font-weight:600" onclick="closeModal('taskListModal')">Tasks</span> page<br>or the side panel on the scheduler.</p>`;
+    emptyEl.style.display = '';
+    listEl.style.display = 'none';
+  } else {
+    emptyEl.style.display = 'none';
+    listEl.style.display = '';
+    listEl.innerHTML = tasks.map(tl =>
+      `<div style="margin-bottom:16px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:8px;color:var(--text)">${tl.name}</div>
+        ${(tl.items || []).map((item, i) =>
+          `<div class="tl-item">
+            <div class="tl-item-check ${item.done ? 'done' : ''}" onclick="toggleTaskItem('${tl.id}',${i})">
+              ${item.done ? '✓' : ''}
+            </div>
+            <span class="tl-item-text ${item.done ? 'done' : ''}">${item.text}</span>
+          </div>`
+        ).join('')}
+      </div>`
+    ).join('');
+  }
+}
+
+function toggleTaskItem(listId, itemIdx) {
+  const taskLists = DB.get('taskLists') || [];
+  const tl = taskLists.find(t => t.id === listId);
+  if (tl && tl.items && tl.items[itemIdx] !== undefined) {
+    tl.items[itemIdx].done = !tl.items[itemIdx].done;
+    DB.set('taskLists', taskLists);
+    renderTaskListBody();
+  }
+}
+
+function createNewTaskList() {
+  openModal('newTaskListWizard');
+  ntlStep = 1;
+  ntlType = 'team';
+  ntlName = '';
+  ntlTasks = [];
+  renderNtlWizard();
+}
+
+let ntlStep = 1, ntlType = 'team', ntlName = '', ntlTasks = [];
+
+function renderNtlWizard() {
+  const steps = document.querySelectorAll('.ntl-step-num');
+  steps.forEach((s, i) => {
+    s.classList.toggle('active', i + 1 === ntlStep);
+    s.classList.toggle('done', i + 1 < ntlStep);
+  });
+
+  const body = document.getElementById('ntlBody');
+  if (ntlStep === 1) {
+    body.innerHTML = `
+      <h3 class="ntl-question">What type of task list?</h3>
+      <div class="ntl-type-cards">
+        <div class="ntl-type-card ${ntlType === 'team' ? 'selected' : ''}" onclick="ntlType='team';renderNtlWizard()">
+          <div class="ntl-type-icon">👥</div>
+          <div class="ntl-type-name">TEAM TASKS</div>
+          <div class="ntl-type-desc">Good for things teams will work on together throughout the day.</div>
+        </div>
+        <div class="ntl-type-card ${ntlType === 'shift' ? 'selected' : ''}" onclick="ntlType='shift';renderNtlWizard()">
+          <div class="ntl-type-icon">👤</div>
+          <div class="ntl-type-name">SHIFT TASKS</div>
+          <div class="ntl-type-desc">Good for things a user needs to complete during their shift.</div>
+        </div>
+      </div>`;
+  } else if (ntlStep === 2) {
+    body.innerHTML = `
+      <h3 class="ntl-question">Name your task list</h3>
+      <input type="text" class="ntl-name-input" id="ntlNameInput" placeholder="e.g. Morning Checklist" value="${ntlName}" oninput="ntlName=this.value">`;
+    setTimeout(() => document.getElementById('ntlNameInput')?.focus(), 100);
+  } else if (ntlStep === 3) {
+    body.innerHTML = `
+      <h3 class="ntl-question">Add tasks to "${ntlName}"</h3>
+      <div class="ntl-task-list" id="ntlTaskList">
+        ${ntlTasks.map((t, i) => `
+          <div class="ntl-task-item">
+            <span class="ntl-task-num">${i + 1}</span>
+            <span class="ntl-task-text">${t}</span>
+            <span class="ntl-task-del" onclick="ntlTasks.splice(${i},1);renderNtlWizard()">✕</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="ntl-add-row">
+        <input type="text" class="ntl-add-input" id="ntlAddInput" placeholder="Add a task..." onkeydown="if(event.key==='Enter')ntlAddTask()">
+        <button class="ntl-add-btn" onclick="ntlAddTask()">+</button>
+      </div>`;
+    setTimeout(() => document.getElementById('ntlAddInput')?.focus(), 100);
+  }
+
+  // Update continue button
+  const btn = document.getElementById('ntlContinueBtn');
+  if (ntlStep === 3) {
+    btn.textContent = 'Create List';
+    btn.onclick = ntlFinish;
+  } else {
+    btn.textContent = 'Continue';
+    btn.onclick = ntlNext;
+  }
+}
+
+function ntlNext() {
+  if (ntlStep === 2 && !ntlName.trim()) { showToast('⚠ Please enter a name'); return; }
+  ntlStep++;
+  renderNtlWizard();
+}
+
+function ntlBack() {
+  if (ntlStep > 1) { ntlStep--; renderNtlWizard(); }
+}
+
+function ntlAddTask() {
+  const input = document.getElementById('ntlAddInput');
+  if (!input || !input.value.trim()) return;
+  ntlTasks.push(input.value.trim());
+  input.value = '';
+  renderNtlWizard();
+}
+
+function ntlFinish() {
+  if (ntlTasks.length === 0) { showToast('⚠ Add at least one task'); return; }
+  const taskLists = DB.get('taskLists') || [];
+  const todayStr = dateStr(new Date(TODAY));
+  taskLists.push({
+    id: 'tl_' + Date.now(),
+    name: ntlName,
+    type: ntlType,
+    date: todayStr,
+    items: ntlTasks.map(t => ({ text: t, done: false }))
+  });
+  DB.set('taskLists', taskLists);
+  closeModal('newTaskListWizard');
+  renderTaskListBody();
+  showToast('✓ Task list "' + ntlName + '" created');
+}
+
+// ── Attendance Dropdown ──
+function toggleAttDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('attDropdown');
+  const isOpen = dd.style.display !== 'none';
+  closeAllDropdowns();
+  dd.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) setTimeout(() => document.addEventListener('click', closeAttDropdown, {once:true}), 10);
+}
+function closeAttDropdown() {
+  document.getElementById('attDropdown').style.display = 'none';
+}
+
+// ── Notification Bell ──
+function toggleNotifPanel(e) {
+  e.stopPropagation();
+  const panel = document.getElementById('notifPanel');
+  const isOpen = panel.style.display !== 'none';
+  closeAllDropdowns();
+  if (!isOpen) {
+    renderNotifPanel();
+    panel.style.display = 'block';
+    setTimeout(() => document.addEventListener('click', closeNotifPanel, {once:true}), 10);
+  } else {
+    panel.style.display = 'none';
+  }
+}
+function closeNotifPanel() {
+  document.getElementById('notifPanel').style.display = 'none';
+}
+
+function closeAllDropdowns() {
+  document.getElementById('attDropdown').style.display = 'none';
+  document.getElementById('notifPanel').style.display = 'none';
+  try { document.getElementById('quickActionsDd').classList.remove('show'); } catch(e) {}
+}
+
+function renderNotifPanel() {
+  const notifs = DB.get('notifications') || getDefaultNotifs();
+  const body = document.getElementById('notifPanelBody');
+  if (notifs.length === 0) {
+    body.innerHTML = '<div style="padding:30px;text-align:center;color:var(--text-light)">No notifications</div>';
+    return;
+  }
+  body.innerHTML = notifs.map(n => `
+    <div class="notif-item ${n.read ? '' : 'unread'}" onclick="handleNotifClick('${n.id}')">
+      <div class="notif-item-icon">${n.icon || '🔔'}</div>
+      <div>
+        <div class="notif-item-text">${n.text}</div>
+        <div class="notif-item-time">${n.time || 'Just now'}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getDefaultNotifs() {
+  return [
+    {id:'n1', icon:'🏖', text:'<strong>Daliliah Canizales</strong> requested time off Mar 10-12', time:'2 hours ago', read:false},
+    {id:'n2', icon:'🔄', text:'<strong>Aziza Baloce</strong> requested a shift swap for Fri Mar 7', time:'3 hours ago', read:false},
+    {id:'n3', icon:'📤', text:'Schedule for Mar 5-11 has <strong>9 unpublished changes</strong>', time:'5 hours ago', read:false},
+    {id:'n4', icon:'⏰', text:'<strong>Siriah Bennett</strong> clocked in 15 min late today', time:'Today 8:15a', read:true},
+    {id:'n5', icon:'✅', text:'<strong>Fatoumata Diallo</strong> completed Morning Checklist', time:'Today 7:30a', read:true}
+  ];
+}
+
+function handleNotifClick(id) {
+  const notifs = DB.get('notifications') || getDefaultNotifs();
+  const n = notifs.find(x => x.id === id);
+  if (n) { n.read = true; DB.set('notifications', notifs); }
+  updateNotifBadge();
+  renderNotifPanel();
+}
+
+function markAllNotifsRead() {
+  const notifs = DB.get('notifications') || getDefaultNotifs();
+  notifs.forEach(n => n.read = true);
+  DB.set('notifications', notifs);
+  updateNotifBadge();
+  renderNotifPanel();
+  showToast('✓ All notifications marked as read');
+}
+
+function updateNotifBadge() {
+  const notifs = DB.get('notifications') || getDefaultNotifs();
+  const unread = notifs.filter(n => !n.read).length;
+  const badge = document.getElementById('notifBadge');
+  if (badge) {
+    badge.textContent = unread || '';
+    badge.style.display = unread ? '' : 'none';
+  }
+}
+
 let toastTimer;
 function toggleQuickActions(e){
   e&&e.stopPropagation();
@@ -13670,7 +15197,7 @@ function renderDashboard() {
           <div class="dash-tl-av" style="background:${s.color || '#9A70BB'}">${s.initials || (s.first||'?')[0]}</div>
           <div style="min-width:0">
             <div class="dash-tl-name">${s.first} ${s.last}</div>
-            <div class="dash-tl-hrs">⏱ ${s.totalHrs.toFixed(1)}</div>
+            <div class="dash-tl-hrs">⏱ ${s.totalHrs.toFixed(2)}</div>
           </div>
         </div>
         <div class="dash-tl-cells" style="grid-column:2/-1;display:grid;grid-template-columns:repeat(${totalHours},1fr)">`;
@@ -13713,14 +15240,30 @@ function renderDashboard() {
         const posName = (shPos && shPos.name) || sh.position || s.title || 'DSP';
         const siteName = sh.jobSite || sh.site || '';
         const label = `${fmtT(sh.start)} – ${fmtT(sh.end)} at ADLP ${posName.toUpperCase()}${siteName ? ' @ ' + siteName : ''}`;
+        const taskCount = (sh.taskLists || '').split(',').filter(Boolean).length;
+        const notesPreview = (sh.notes || '').substring(0, 80).toUpperCase();
 
         // Published indicator dot
         const pubDot = `<span style="width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;box-shadow:0 0 4px rgba(34,197,94,.5);display:inline-block"></span>`;
 
-        html += `<div class="dash-tl-shift" style="left:${left}%;width:${width}%;background:${barBg};border-left:3px solid ${barBorder}" title="${label}" onclick="openEditShift('${sh.id}')">
-          <span class="dash-tl-shift-text">${label}</span>
-          ${pubDot}
+        html += `<div class="dash-tl-shift" style="left:${left}%;width:${width}%;background:${barBg};border-left:3px solid ${barBorder}" 
+          onmouseenter="showShiftHoverPop('${sh.id}',event)" onmouseleave="scheduleHidePopover()" onclick="editShift('${sh.id}')">
+          <span class="dash-tl-shift-text"><b>${fmtT(sh.start)} – ${fmtT(sh.end)}</b> at ADLP <span style="text-transform:uppercase">${posName}</span>${siteName ? ' @ ' + siteName.toUpperCase() : ''}</span>
+          ${sh.published ? pubDot : ''}
+          <div class="dtl-hover-tag" onclick="event.stopPropagation();openShiftDetailPopup('${sh.id}')">VIEW DETAILS</div>
         </div>`;
+
+        // Store data for popover
+        if (!window._shiftPopData) window._shiftPopData = {};
+        window._shiftPopData[sh.id] = {
+          time: fmtT(sh.start) + ' – ' + fmtT(sh.end),
+          position: posName,
+          site: siteName || 'Main Office',
+          tasks: taskCount,
+          notes: notesPreview,
+          staffName: s.first + ' ' + s.last,
+          shiftId: sh.id
+        };
       });
 
       // Now marker
@@ -15653,12 +17196,12 @@ function editScheduleGroup(id) {
 //  JOB SITES
 // ──────────────────────────────────────────────
 function getJobSites() {
-  if (!DB.get('job_sites_init')) {
+  if (!DB.get('job_sites_init2')) {
     DB.set('job_sites', [
-      { id: 'js_wiw_1', name: "#1 ADLP HOUSE", address: "23944 West Ripple Road, Buckeye, AZ, USA", phone: '', active: true },
-      { id: 'js_wiw_2', name: "#2 ADLP HOUSE", address: "1540 S 241st Ave, Buckeye, AZ 85326, USA", phone: '', active: true }
+      { id: 'js_wiw_1', name: "#1 ADLP HOUSE", address: "23944 West Ripple Road, Buckeye, AZ, USA", phone: '', active: true, lat: 33.4342, lng: -112.5838 },
+      { id: 'js_wiw_2', name: "#2 ADLP HOUSE", address: "1540 S 241st Ave, Buckeye, AZ 85326, USA", phone: '', active: true, lat: 33.4255, lng: -112.5680 }
     ]);
-    DB.set('job_sites_init', true);
+    DB.set('job_sites_init2', true);
   }
   return DB.get('job_sites') || [];
 }
@@ -17071,7 +18614,13 @@ function buildOSRow1W(dates, df, isToday) {
     });
 
     if (isMgr && isEmpty) {
-      cells += `<div class="os-add-plus">＋</div>`;
+      cells += `<div class="os-hover-add" onclick="event.stopPropagation();openOSModal('${ds}')">
+        <span class="ohab-icon">＋</span>
+        <span class="ohab-label">Add Open Shift</span>
+      </div>`;
+    }
+    if (isMgr && !isEmpty) {
+      cells += `<div class="os-add-link" onclick="event.stopPropagation();openOSModal('${ds}')">+ Add open shift</div>`;
     }
     cells += '</div>';
   });
@@ -18981,8 +20530,335 @@ function setTsApproval(staffId, periodStart, status) {
   DB.set(`ts_approval_${staffId}_${periodStart}`, status);
 }
 
+// ── Timesheet Detail View (WhenIWork style) ──
+let tsdCurrentStaff = null;
+
+function openTsDetail(staffId) {
+  const staff = getStaff();
+  const s = staff.find(x => x.id === staffId);
+  if (!s) return;
+  tsdCurrentStaff = s;
+
+  // Show detail view, hide summary view
+  document.getElementById('tsDetailView').style.display = '';
+  document.getElementById('tsSummaryView').style.display = 'none';
+
+  document.getElementById('tsdEmpName').textContent = s.first + ' ' + s.last;
+  renderTsdStaffList('');
+  renderTsdDayTable(staffId);
+}
+
+function closeTsDetail() {
+  document.getElementById('tsDetailView').style.display = 'none';
+  document.getElementById('tsSummaryView').style.display = '';
+}
+
+function closeTsDetailPeriod() {
+  showToast('✓ Pay period closed');
+}
+
+function renderTsdStaffList(filter) {
+  const staff = getStaff().filter(s => s.status === 'active');
+  const q = filter.toLowerCase();
+  const filtered = q ? staff.filter(s => (s.first + ' ' + s.last).toLowerCase().includes(q)) : staff;
+  const el = document.getElementById('tsdStaffList');
+  el.innerHTML = filtered.map(s => `
+    <div class="tsd-staff-row ${tsdCurrentStaff && tsdCurrentStaff.id === s.id ? 'active' : ''}" onclick="openTsDetail('${s.id}')">
+      <div class="tsd-staff-av" style="background:${s.color || '#9A70BB'}">${s.initials || s.first[0]}</div>
+      <span class="tsd-staff-name">${s.first} ${s.last}</span>
+      <span class="tsd-staff-warn">⚠</span>
+    </div>
+  `).join('');
+}
+
+function filterTsdStaff(val) { renderTsdStaffList(val); }
+
+function renderTsdDayTable(staffId) {
+  const allAtt = getAtt();
+  const allShifts = getShifts();
+  const today = new Date(TODAY);
+
+  // Get pay period dates (current biweekly)
+  const periodStart = new Date(today);
+  periodStart.setDate(periodStart.getDate() - periodStart.getDay() - 7);
+  const periodEnd = new Date(periodStart);
+  periodEnd.setDate(periodEnd.getDate() + 13);
+
+  document.getElementById('tsdPeriodLabel').textContent =
+    periodStart.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' - ' +
+    periodEnd.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const monNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  let bodyHtml = '';
+  let totalWorked = 0, totalSched = 0, totalReg = 0, totalOt = 0;
+
+  for (let i = 0; i < 14; i++) {
+    const d = new Date(periodStart);
+    d.setDate(d.getDate() + i);
+    const ds = dateStr(d);
+    const dayLabel = dayNames[d.getDay()] + ', ' + monNames[d.getMonth()] + ' ' + d.getDate();
+
+    const att = allAtt.find(a => a.staffId === staffId && a.date === ds);
+    const shift = allShifts.find(s => s.staffId === staffId && s.date === ds);
+
+    const clockInRaw = att && att.clockIn ? att.clockIn : '';
+    const clockOutRaw = att && att.clockOut ? att.clockOut : '';
+    const clockInFmt = clockInRaw ? fmtTime(clockInRaw) : '';
+    const clockOutFmt = clockOutRaw ? fmtTime(clockOutRaw) : '';
+    const worked = clockInRaw && clockOutRaw ? parseFloat(calcHours(clockInRaw, clockOutRaw)) : 0;
+    const sched = shift ? parseFloat(calcHours(shift.start, shift.end)) : 0;
+    const diff = worked - sched;
+
+    totalWorked += worked;
+    totalSched += sched;
+
+    // Build details column
+    const pos = shift ? (shift.position || 'Direct Support Professional') : '';
+    const site = shift ? (shift.jobSite || shift.site || shift.location || '') : '';
+    const dept = shift ? (shift.dept || 'ADLP') : '';
+    const attNote = att && att.note ? att.note : '';
+    const attSite = att && att.site ? att.site : '';
+    let detailsHtml = '';
+    // Only show details when there's actual clock-in data entered
+    if (clockInRaw) {
+      if (dept) detailsHtml += `<span class="tsd-detail-pill">${dept}</span>`;
+      if (pos) detailsHtml += `<span class="tsd-detail-text">${pos}</span>`;
+      if (attSite) detailsHtml += `<span class="tsd-detail-pill site">${attSite}</span>`;
+    }
+    // Action icons - only show when there's clock data
+    let actionsHtml = '';
+    if (clockInRaw) {
+      actionsHtml = `<div class="tsd-row-actions">
+        <span class="tsd-action-icon" title="Add a note" onclick="tsdAddNote('${staffId}','${ds}')">💬</span>
+        <span class="tsd-action-icon" title="Add site" onclick="tsdAddSite('${staffId}','${ds}')">📍</span>
+        <span class="tsd-action-icon" title="Clock details" onclick="showToast('⏰ Clock details for ${dayLabel}')">⏰</span>
+        <span class="tsd-action-icon" title="Edit entry" onclick="tsdEditEntry('${staffId}','${ds}')">✏️</span>
+        <span class="tsd-action-icon" title="Copy entry" onclick="showToast('📋 Entry copied')">📋</span>
+        <span class="tsd-action-icon" title="Delete entry" onclick="tsdDeleteEntry('${staffId}','${ds}')">🗑️</span>
+      </div>`;
+    }
+    // Note display
+    let noteHtml = attNote ? `<div class="tsd-note-display">📝 ${attNote}</div>` : '';
+
+    // Difference color
+    const diffClass = diff > 0 ? 'tsd-positive' : diff < 0 ? 'tsd-negative' : '';
+
+    // Add + button for empty rows
+    const addBtn = (!clockInRaw && !shift) ? '' : '';
+    const plusBtn = (!clockInRaw) ? `<span class="tsd-add-plus" onclick="tsdQuickAdd('${staffId}','${ds}')" title="Add time entry">+</span>` : '';
+
+    bodyHtml += `<div class="tsd-table-row ${clockInRaw ? 'has-data' : ''}">
+      <span class="tsd-col-day">${dayLabel} ${!clockInRaw ? plusBtn : ''}</span>
+      <span class="tsd-editable"><input type="text" class="tsd-time-input" value="${clockInFmt}" placeholder="—" data-staff="${staffId}" data-date="${ds}" data-field="clockIn" onchange="saveTsdTime(this)"></span>
+      <span class="tsd-editable"><input type="text" class="tsd-time-input" value="${clockOutFmt}" placeholder="—" data-staff="${staffId}" data-date="${ds}" data-field="clockOut" onchange="saveTsdTime(this)"></span>
+      <span class="tsd-total-cell">${worked ? worked.toFixed(2) : ''}</span>
+      <span class="tsd-details-cell">
+        <div>${detailsHtml}</div>
+        ${noteHtml}
+        ${actionsHtml}
+      </span>
+      <span>${worked ? worked.toFixed(2) : '0.00'}</span>
+      <span>${sched ? sched.toFixed(2) : '0.00'}</span>
+      <span class="${diffClass}">${diff ? (diff > 0 ? '+' : '') + diff.toFixed(2) : '0.00'}</span>
+    </div>`;
+  }
+
+  totalReg = Math.min(totalWorked, 80);
+  totalOt = Math.max(0, totalWorked - 80);
+
+  document.getElementById('tsdTableBody').innerHTML = bodyHtml;
+  document.getElementById('tsdTableTotal').innerHTML = `
+    <span style="font-weight:800">Total</span>
+    <span></span><span></span>
+    <span style="color:var(--lav-dark);font-weight:800">${totalWorked.toFixed(2)}</span>
+    <span></span>
+    <span style="color:var(--lav-dark)">${totalWorked.toFixed(2)}</span>
+    <span style="color:var(--lav-dark)">${totalSched.toFixed(2)}</span>
+    <span class="${(totalWorked-totalSched) >= 0 ? 'tsd-positive' : 'tsd-negative'}">${(totalWorked-totalSched) >= 0 ? '+' : ''}${(totalWorked-totalSched).toFixed(2)}</span>
+  `;
+
+  // Update hour tabs
+  document.getElementById('tsdRegHrs').textContent = totalReg.toFixed(2);
+  document.getElementById('tsdOtHrs').textContent = totalOt.toFixed(2);
+  document.getElementById('tsdPaidTotal').textContent = totalWorked.toFixed(2);
+  document.getElementById('tsdSchedVsWork').textContent = (totalWorked - totalSched).toFixed(2);
+
+  // Color overtime if > 0
+  if (totalOt > 0) document.getElementById('tsdOtHrs').style.color = '#dc2626';
+}
+
+function approveTsdTimesheet() {
+  if (!tsdCurrentStaff) return;
+  showToast('✅ Timesheet approved for ' + tsdCurrentStaff.first + ' ' + tsdCurrentStaff.last);
+}
+
+function saveTsdTime(input) {
+  const staffId = input.dataset.staff;
+  const date = input.dataset.date;
+  const field = input.dataset.field;
+  let val = input.value.trim();
+
+  // Parse time input (accept formats like 3:59p, 8:01a, 15:59, etc.)
+  let parsed = '';
+  if (val) {
+    val = val.toLowerCase().replace(/\s/g,'');
+    const ampmMatch = val.match(/^(\d{1,2}):?(\d{2})?\s*(a|p|am|pm)?$/);
+    if (ampmMatch) {
+      let h = parseInt(ampmMatch[1]);
+      let m = parseInt(ampmMatch[2] || '0');
+      const ap = ampmMatch[3];
+      if (ap && (ap === 'p' || ap === 'pm') && h < 12) h += 12;
+      if (ap && (ap === 'a' || ap === 'am') && h === 12) h = 0;
+      parsed = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+    }
+  }
+
+  if (val && !parsed) {
+    showToast('⚠ Invalid time format. Use 3:59p or 8:01a');
+    return;
+  }
+
+  let allAtt = getAtt();
+  let att = allAtt.find(a => a.staffId === staffId && a.date === date);
+  if (!att) {
+    att = { id: 'att_' + Date.now(), staffId, date, clockIn: '', clockOut: '', status: 'normal' };
+    allAtt.push(att);
+  }
+  att[field] = parsed;
+  DB.set('attendance', allAtt);
+  if (parsed) input.value = fmtTime(parsed);
+  renderTsdDayTable(staffId);
+  showToast('✓ Time saved');
+}
+
+function tsdAddNote(staffId, date) {
+  const note = prompt('Add a note for this entry:');
+  if (note === null) return;
+  let allAtt = getAtt();
+  let att = allAtt.find(a => a.staffId === staffId && a.date === date);
+  if (!att) {
+    att = { id: 'att_' + Date.now(), staffId, date, clockIn: '', clockOut: '', status: 'normal' };
+    allAtt.push(att);
+  }
+  att.note = note;
+  DB.set('attendance', allAtt);
+  renderTsdDayTable(staffId);
+  showToast('✓ Note saved');
+}
+
+function tsdEditEntry(staffId, date) {
+  const allAtt = getAtt();
+  const att = allAtt.find(a => a.staffId === staffId && a.date === date);
+  const clockIn = prompt('Clock In time (e.g. 3:59p):', att && att.clockIn ? fmtTime(att.clockIn) : '');
+  if (clockIn === null) return;
+  const clockOut = prompt('Clock Out time (e.g. 8:01a):', att && att.clockOut ? fmtTime(att.clockOut) : '');
+  if (clockOut === null) return;
+
+  // Parse and save
+  const parseT = v => {
+    if (!v) return '';
+    v = v.toLowerCase().replace(/\s/g,'');
+    const m = v.match(/^(\d{1,2}):?(\d{2})?\s*(a|p|am|pm)?$/);
+    if (!m) return '';
+    let h = parseInt(m[1]), min = parseInt(m[2]||'0');
+    const ap = m[3];
+    if (ap && (ap==='p'||ap==='pm') && h < 12) h += 12;
+    if (ap && (ap==='a'||ap==='am') && h === 12) h = 0;
+    return String(h).padStart(2,'0') + ':' + String(min).padStart(2,'0');
+  };
+
+  if (!att) {
+    const newAtt = { id: 'att_' + Date.now(), staffId, date, clockIn: parseT(clockIn), clockOut: parseT(clockOut), status: 'normal' };
+    allAtt.push(newAtt);
+  } else {
+    if (clockIn) att.clockIn = parseT(clockIn);
+    if (clockOut) att.clockOut = parseT(clockOut);
+  }
+  DB.set('attendance', allAtt);
+  renderTsdDayTable(staffId);
+  showToast('✓ Entry updated');
+}
+
+function tsdDeleteEntry(staffId, date) {
+  if (!confirm('Delete time entry for this day?')) return;
+  let allAtt = getAtt();
+  allAtt = allAtt.filter(a => !(a.staffId === staffId && a.date === date));
+  DB.set('attendance', allAtt);
+  renderTsdDayTable(staffId);
+  showToast('🗑 Entry deleted');
+}
+
+function tsdQuickAdd(staffId, date) {
+  tsdEditEntry(staffId, date);
+}
+
+function tsdAddSite(staffId, date) {
+  const jobSites = typeof getJobSites === 'function' ? getJobSites() : (DB.get('job_sites') || []);
+  if (jobSites.length === 0) {
+    showToast('⚠ No job sites configured. Add them in Settings → Job Sites');
+    return;
+  }
+
+  // Create a popup selector
+  const existing = document.getElementById('tsdSitePopup');
+  if (existing) existing.remove();
+
+  const popup = document.createElement('div');
+  popup.id = 'tsdSitePopup';
+  popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.25);z-index:800;min-width:280px;max-width:90vw;overflow:hidden;';
+  
+  let html = '<div style="padding:14px 18px;background:linear-gradient(135deg,#3D1A5C,#6B4FA0);color:white;font-weight:700;font-size:14px;font-family:Playfair Display,serif">Select Job Site</div>';
+  html += '<div style="max-height:300px;overflow-y:auto">';
+  jobSites.forEach(js => {
+    html += `<div style="padding:12px 18px;cursor:pointer;font-size:14px;font-family:DM Sans,sans-serif;border-bottom:1px solid rgba(155,125,202,.06);display:flex;align-items:center;gap:10px" 
+      onmouseover="this.style.background='var(--lav-pale)'" onmouseout="this.style.background=''"
+      onclick="selectTsdSite('${staffId}','${date}','${js.name.replace(/'/g,"\\'")}')">
+      <span style="font-size:16px">📍</span> ${js.name}${js.address ? '<br><span style=font-size:11px;color:var(--text-light)>' + js.address + '</span>' : ''}
+    </div>`;
+  });
+  html += '</div>';
+  html += '<div style="padding:10px 18px;text-align:right;border-top:1px solid rgba(155,125,202,.08)"><button onclick="document.getElementById(\'tsdSitePopup\').remove()" style="padding:6px 16px;border:1.5px solid rgba(155,125,202,.2);border-radius:6px;background:white;cursor:pointer;font-size:13px;font-family:DM Sans,sans-serif">Cancel</button></div>';
+  
+  popup.innerHTML = html;
+  document.body.appendChild(popup);
+
+  // Close on backdrop click
+  const backdrop = document.createElement('div');
+  backdrop.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:799';
+  backdrop.onclick = () => { popup.remove(); backdrop.remove(); };
+  backdrop.id = 'tsdSiteBackdrop';
+  document.body.appendChild(backdrop);
+}
+
+function selectTsdSite(staffId, date, siteName) {
+  let allAtt = getAtt();
+  let att = allAtt.find(a => a.staffId === staffId && a.date === date);
+  if (!att) {
+    att = { id: 'att_' + Date.now(), staffId, date, clockIn: '', clockOut: '', status: 'normal' };
+    allAtt.push(att);
+  }
+  att.site = siteName;
+  DB.set('attendance', allAtt);
+
+  document.getElementById('tsdSitePopup')?.remove();
+  document.getElementById('tsdSiteBackdrop')?.remove();
+  renderTsdDayTable(staffId);
+  showToast('✓ Site "' + siteName + '" added');
+}
+
 function renderTimesheets() {
   try { renderMobAtt(); } catch(e) { console.log('mobAtt:', e); }
+
+  // Auto-open detail view with first staff member
+  const staffList = getStaff().filter(s => s.status === 'active');
+  if (staffList.length > 0 && !tsdCurrentStaff) {
+    setTimeout(() => openTsDetail(staffList[0].id), 50);
+  } else if (tsdCurrentStaff) {
+    setTimeout(() => openTsDetail(tsdCurrentStaff.id), 50);
+  }
+
   const range = tsGetWeekRange(tsPeriodOffset);
   document.getElementById('tsPeriodLabel').textContent = range.label;
 
@@ -19085,7 +20961,7 @@ function buildTsRow({ s, sShifts, sAtt, totalHrs, schedHrs, regHrs, otHrs, pay, 
         <div class="ts-emp-info">
           <div class="ts-emp-av" style="background:${photo ? 'transparent' : s.color}">${avHtml}</div>
           <div>
-            <div class="ts-emp-name">${s.first} ${s.last}</div>
+            <div class="ts-emp-name" onclick="event.stopPropagation();openTsDetail('${s.id}')" style="cursor:pointer;text-decoration:underline;text-decoration-color:rgba(155,125,202,.3)">${s.first} ${s.last}</div>
             <div class="ts-emp-sub">${s.title || s.dept}</div>
           </div>
         </div>
@@ -19413,6 +21289,11 @@ try {
 // ══════════════════════════════════════
 //  PWA — Service Worker & Install
 // ══════════════════════════════════════
+// Lock to portrait on mobile
+if (screen.orientation && screen.orientation.lock) {
+  screen.orientation.lock('portrait').catch(() => {});
+}
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js')
@@ -19487,6 +21368,7 @@ function mobNav(view) {
 </script>
 
 <!-- Mobile Bottom Navigation -->
+<div class="ms-filter-overlay" id="msFilterOverlay" onclick="toggleMobFilters()"></div>
 <nav class="mob-bottom-nav" id="mobBottomNav">
   <button class="mob-nav-btn active" onclick="mobNav('schedule')">
     <span class="mob-nav-icon">📊</span>
@@ -19598,21 +21480,129 @@ function renderMobDash(todayStr) {
   }
 }
 
+// ── Geofence Clock-In System ──
+const GEOFENCE_RADIUS_FEET = 5;
+const GEOFENCE_RADIUS_METERS = GEOFENCE_RADIUS_FEET * 0.3048; // ~1.524 meters
+
+function getDistanceMeters(lat1, lng1, lat2, lng2) {
+  const R = 6371000; // Earth radius in meters
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLng/2) * Math.sin(dLng/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
+function getDistanceFeet(lat1, lng1, lat2, lng2) {
+  return getDistanceMeters(lat1, lng1, lat2, lng2) * 3.28084;
+}
+
 function mobClockAction() {
   const todayStr = dateStr(new Date(TODAY));
   const myId = currentUser.staffId || '';
   const att = getAtt();
   const myAtt = att.find(a => a.staffId === myId && a.date === todayStr);
+
+  // If clocking OUT, no geofence needed
+  if (myAtt && myAtt.clockIn && !myAtt.clockOut) {
+    const now = new Date();
+    const t = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    myAtt.clockOut = t; myAtt.status = 'on-time';
+    DB.set('attendance', att);
+    showToast('✓ Clocked out at ' + fmtTime(t));
+    renderDashboard();
+    return;
+  }
+
+  // Clocking IN — only geofence on mobile, desktop clocks in freely
+  if (window.innerWidth > 768) {
+    doClockIn(att, myAtt, myId, todayStr, null);
+    return;
+  }
+
+  // Mobile: check geofence
+  // Find today's shift to determine which job site
+  const shifts = getShifts();
+  const todayShift = shifts.find(s => s.staffId === myId && s.date === todayStr);
+  const shiftSiteName = todayShift ? (todayShift.jobSite || todayShift.site || todayShift.location || '') : '';
+
+  const jobSites = typeof getJobSites === 'function' ? getJobSites() : [];
+  let targetSite = null;
+  if (shiftSiteName) {
+    targetSite = jobSites.find(js => js.name === shiftSiteName);
+  }
+
+  // If no specific site assigned or site has no coordinates, allow clock-in from anywhere
+  if (!targetSite || !targetSite.lat || !targetSite.lng) {
+    doClockIn(att, myAtt, myId, todayStr, null);
+    return;
+  }
+
+  // Check GPS location
+  showToast('📍 Checking your location...');
+
+  if (!navigator.geolocation) {
+    showToast('⚠ Geolocation not supported. Clock-in allowed.');
+    doClockIn(att, myAtt, myId, todayStr, null);
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
+      const distFeet = getDistanceFeet(userLat, userLng, targetSite.lat, targetSite.lng);
+      const distRounded = Math.round(distFeet);
+
+      if (distFeet <= GEOFENCE_RADIUS_FEET) {
+        doClockIn(att, myAtt, myId, todayStr, targetSite.name);
+        showToast(`✓ Location verified! You are ${distRounded} ft from ${targetSite.name}`);
+      } else {
+        // Show distance and deny
+        const distMiles = (distFeet / 5280).toFixed(2);
+        showToast(`❌ Too far from ${targetSite.name}. You are ${distRounded > 5280 ? distMiles + ' miles' : distRounded + ' feet'} away. Must be within ${GEOFENCE_RADIUS_FEET} feet.`);
+
+        // Show a modal with more info
+        if (confirm(`You are ${distRounded > 5280 ? distMiles + ' miles' : distRounded + ' feet'} from ${targetSite.name}.\n\nYou must be within ${GEOFENCE_RADIUS_FEET} feet of the job site to clock in.\n\nAddress: ${targetSite.address}\n\nOverride and clock in anyway? (Manager approval may be required)`)) {
+          doClockIn(att, myAtt, myId, todayStr, targetSite.name + ' (override)');
+          showToast('⚠ Clocked in with location override — manager will be notified');
+        }
+      }
+    },
+    (error) => {
+      let msg = 'Location error: ';
+      switch(error.code) {
+        case 1: msg += 'Location permission denied. Please enable location services.'; break;
+        case 2: msg += 'Location unavailable.'; break;
+        case 3: msg += 'Location request timed out.'; break;
+        default: msg += error.message;
+      }
+      showToast('⚠ ' + msg);
+
+      if (confirm(msg + '\n\nClock in without location verification?')) {
+        doClockIn(att, myAtt, myId, todayStr, 'No GPS');
+        showToast('⚠ Clocked in without location verification');
+      }
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+}
+
+function doClockIn(att, myAtt, myId, todayStr, siteName) {
   const now = new Date();
   const t = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  if (myAtt && myAtt.clockIn && !myAtt.clockOut) {
-    myAtt.clockOut = t; myAtt.status = 'on-time';
-    DB.set('attendance', att); showToast('✓ Clocked out at ' + t);
+  if (myAtt) {
+    myAtt.clockIn = t; myAtt.clockOut = null;
+    if (siteName) myAtt.clockSite = siteName;
   } else {
-    if (myAtt) { myAtt.clockIn = t; myAtt.clockOut = null; }
-    else { att.push({id:uid(),staffId:myId,date:todayStr,clockIn:t,clockOut:null,status:'on-time'}); }
-    DB.set('attendance', att); showToast('✓ Clocked in at ' + t);
+    const newAtt = { id: uid(), staffId: myId, date: todayStr, clockIn: t, clockOut: null, status: 'on-time' };
+    if (siteName) newAtt.clockSite = siteName;
+    att.push(newAtt);
   }
+  DB.set('attendance', att);
+  showToast('✓ Clocked in at ' + fmtTime(t));
   renderDashboard();
 }
 
@@ -19748,8 +21738,10 @@ function renderMobHours() {
   const allAtt = getAtt();
   const today = new Date(TODAY);
 
-  // Show last 4 weeks
+  // Check if there are any hours at all
+  let totalAllHours = 0;
   let html = '';
+
   for (let w = 0; w < 4; w++) {
     const ws = new Date(today);
     ws.setDate(ws.getDate() - ws.getDay() - w * 7);
@@ -19771,12 +21763,23 @@ function renderMobHours() {
         dayRows += `<div class="mob-hours-row"><span>${days[d]} ${dd.getDate()}</span><span class="val">${hrs.toFixed(1)} hrs</span></div>`;
       }
     }
-    html += `<div class="mob-hours-card">
-      <div class="mob-hours-week">${wLabel}</div>
-      ${dayRows || '<div class="mob-hours-row"><span style="font-style:italic">No hours</span></div>'}
-      <div class="mob-hours-total"><span>Total</span><span>${weekTotal.toFixed(1)} hrs</span></div>
+    totalAllHours += weekTotal;
+    if (weekTotal > 0) {
+      html += `<div class="mob-hours-card">
+        <div class="mob-hours-week">${wLabel}</div>
+        ${dayRows}
+        <div class="mob-hours-total"><span>Total</span><span>${weekTotal.toFixed(1)} hrs</span></div>
+      </div>`;
+    }
+  }
+
+  if (totalAllHours === 0) {
+    html = `<div class="mh-empty">
+      <div class="mh-empty-icon">😐</div>
+      <div class="mh-empty-text">We couldn't find any hours to display.<br>Check back after you've worked a few shifts.</div>
     </div>`;
   }
+
   el.innerHTML = html;
 }
 
@@ -19838,6 +21841,557 @@ function renderMobAvailability() {
 }
 
 function saveMobAvail() { showToast('✓ Availability updated'); }
+
+// ── Mobile Shift Detail ──
+let mobShiftDetailId = null;
+
+function openMobShiftDetail(shiftId) {
+  mobShiftDetailId = shiftId;
+  switchView('shiftdetail', null);
+
+  const shifts = getShifts();
+  const sh = shifts.find(s => s.id === shiftId);
+  if (!sh) { showToast('⚠ Shift not found'); return; }
+
+  const staff = getStaff();
+  const s = staff.find(x => x.id === sh.staffId);
+  if (!s) return;
+
+  const pos = sh.position || s.title || 'Direct Support Professional';
+  const site = sh.jobSite || sh.site || sh.location || '';
+  const siteAddr = sh.address || '';
+  const dept = sh.dept || 'ADLP';
+  const color = sh.color || 'Peacock';
+  const published = sh.published ? 'Yes' : 'No';
+  const tasks = sh.tasks || [];
+  const notes = sh.notes || '';
+
+  // Parse date
+  const d = parseDate(sh.date);
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dateDisplay = dayNames[d.getDay()] + ', ' + monthNames[d.getMonth()] + ' ' + d.getDate();
+
+  document.getElementById('msdHeaderDate').textContent = dateDisplay;
+
+  let html = '';
+
+  // Time
+  html += `<div class="msd-row">
+    <div class="msd-icon">🕐</div>
+    <div><div class="msd-label">Time</div>
+    <div class="msd-value">${fmtTime(sh.start)} – ${fmtTime(sh.end)}</div></div>
+  </div>`;
+
+  // Schedule/Dept
+  html += `<div class="msd-row">
+    <div class="msd-icon">📋</div>
+    <div><div class="msd-label">Schedule</div>
+    <div class="msd-value">${dept}</div></div>
+  </div>`;
+
+  // Position
+  html += `<div class="msd-row">
+    <div class="msd-icon">👤</div>
+    <div><div class="msd-label">Position</div>
+    <div class="msd-value">${pos}</div></div>
+  </div>`;
+
+  // Job Site
+  html += `<div class="msd-row">
+    <div class="msd-icon">📍</div>
+    <div><div class="msd-label">Job Site</div>
+    <div class="msd-value">${site || 'Main Office'}</div>
+    ${siteAddr ? '<div class="msd-sub">' + siteAddr + '</div>' : ''}</div>
+  </div>`;
+
+  // Assigned To
+  html += `<div class="msd-row">
+    <div class="msd-icon" style="background:${s.color || '#9A70BB'};color:white;font-size:11px;font-weight:700">${s.initials || s.first[0]}</div>
+    <div><div class="msd-label">Assigned To</div>
+    <div class="msd-value">${s.first} ${s.last}</div></div>
+  </div>`;
+
+  // How many shifts
+  const staffShiftsToday = shifts.filter(x => x.staffId === sh.staffId && x.date === sh.date);
+  html += `<div class="msd-row">
+    <div class="msd-icon">📊</div>
+    <div><div class="msd-label">How Many Shifts</div>
+    <div class="msd-value">${staffShiftsToday.length}</div></div>
+  </div>`;
+
+  // Shift color
+  html += `<div class="msd-row">
+    <div class="msd-icon" style="background:${sh.colorHex || '#008B8B'}">  </div>
+    <div><div class="msd-label">Shift Color</div>
+    <div class="msd-value">${color}</div></div>
+  </div>`;
+
+  // Tasks
+  html += `<div class="msd-row">
+    <div class="msd-icon">✅</div>
+    <div><div class="msd-label">Tasks</div>
+    <div class="msd-value">${tasks.length > 0 ? tasks.length + ' Tasks assigned' : 'No tasks assigned'}</div></div>
+  </div>`;
+
+  // Notes
+  if (notes) {
+    html += `<div class="msd-divider"></div>`;
+    html += `<div class="msd-notes">
+      <div class="msd-notes-label">Notes</div>
+      <div class="msd-notes-text">${notes}</div>
+    </div>`;
+  }
+
+  // Actions
+  html += `<div class="msd-divider"></div>`;
+  html += `<div class="msd-actions">
+    <button class="msd-action-btn primary" onclick="showToast('✓ Publishing shift...')">Publish Shift</button>
+    <button class="msd-action-btn primary" onclick="showToast('✓ Unpublishing shift...')">Unpublish</button>
+    <button class="msd-action-btn primary" onclick="showToast('🔍 Finding replacement...')">Find Replacement</button>
+    <button class="msd-action-btn primary" onclick="copyShift('${sh.id}')">Copy Shift</button>
+    <button class="msd-action-btn primary" onclick="showToast('📤 Sending reminder...')">Send Reminder</button>
+  </div>`;
+
+  document.getElementById('msdContent').innerHTML = html;
+}
+
+function copyShift(shiftId) {
+  const shifts = getShifts();
+  const sh = shifts.find(s => s.id === shiftId);
+  if (!sh) return;
+  const newShift = Object.assign({}, sh, { id: 'sh_' + Date.now() + Math.random().toString(36).slice(2,5) });
+  shifts.push(newShift);
+  DB.set('shifts', shifts);
+  showToast('✓ Shift copied');
+}
+
+// ── Mobile Availability Page ──
+let mavViewDate = new Date(TODAY);
+let mavSelectedDate = dateStr(new Date(TODAY));
+
+function openMobAvailability() {
+  switchView('availability', null);
+  mavViewDate = new Date(TODAY);
+  renderMobAvail();
+}
+
+function mobAvailNavMonth(dir) {
+  mavViewDate.setMonth(mavViewDate.getMonth() + dir);
+  renderMobAvail();
+}
+
+function mobAvailToggleCal() {
+  showToast('📅 Calendar view');
+}
+
+function renderMobAvail() {
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const y = mavViewDate.getFullYear();
+  const m = mavViewDate.getMonth();
+  const todayStr = dateStr(TODAY);
+
+  document.getElementById('mavCalMonth').textContent = monthNames[m];
+
+  // Get saved availability
+  const myId = currentUser ? (currentUser.staffId || currentUser.id) : '';
+  const avail = DB.get('availability_' + myId) || {};
+
+  // Build calendar grid
+  // Start from Thursday (matching WhenIWork layout shown)
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m + 1, 0).getDate();
+  const prevMonthDays = new Date(y, m, 0).getDate();
+
+  let html = '';
+
+  // Previous month trailing days
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const day = prevMonthDays - i;
+    html += `<div class="mav-cal-cell other-month">${day}</div>`;
+  }
+
+  // Current month days
+  for (let day = 1; day <= daysInMonth; day++) {
+    const d = new Date(y, m, day);
+    const ds = dateStr(d);
+    let cls = 'mav-cal-cell';
+    if (ds === todayStr) cls += ' today';
+    if (avail[ds]) cls += ' has-avail';
+    html += `<div class="${cls}" onclick="mavSelectDay('${ds}')">${day}</div>`;
+  }
+
+  // Next month
+  const totalCells = firstDay + daysInMonth;
+  const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+  for (let i = 1; i <= remaining; i++) {
+    html += `<div class="mav-cal-cell other-month">${i}</div>`;
+  }
+
+  document.getElementById('mavCalGrid').innerHTML = html;
+
+  // Build day list — show 7 days from selected date
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const monNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const sel = parseDate(mavSelectedDate || todayStr);
+  let listHtml = '';
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(sel);
+    d.setDate(d.getDate() + i);
+    const ds = dateStr(d);
+    const dayLabel = dayNames[d.getDay()] + ', ' + monNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+    const prefs = avail[ds];
+
+    listHtml += `<div class="mav-day-item">
+      <div class="mav-day-header">
+        <span class="mav-day-date">${dayLabel}</span>
+        <button class="mav-day-add" onclick="addMobAvailPref('${ds}')">＋</button>
+      </div>
+      <div class="mav-day-body">`;
+
+    if (prefs && prefs.length > 0) {
+      prefs.forEach(p => {
+        const color = p.type === 'unavailable' ? '#dc2626' : p.type === 'preferred' ? '#059669' : '#059669';
+        const label = p.type === 'unavailable' ? 'Unavailable' : p.type === 'preferred' ? 'Prefer to work' : 'Available';
+        const time = p.allDay !== false ? 'All Day' : (p.start && p.end ? fmtTime(p.start) + ' – ' + fmtTime(p.end) : 'All Day');
+        listHtml += `<div class="mav-pref">
+          <span class="mav-pref-dot" style="background:${color}"></span>
+          <span class="mav-pref-text">${label}: ${time}</span>
+        </div>`;
+      });
+    } else {
+      listHtml += `<span>No preferences set</span>`;
+    }
+
+    listHtml += `</div></div>`;
+  }
+
+  document.getElementById('mavDayList').innerHTML = listHtml;
+}
+
+function mavSelectDay(ds) {
+  mavSelectedDate = ds;
+  renderMobAvail();
+}
+
+function addMobAvailPref(ds) {
+  openMobAvailEdit(ds);
+}
+
+function openMobAvailEdit(ds) {
+  const myId = currentUser ? (currentUser.staffId || currentUser.id) : '';
+  const avail = DB.get('availability_' + myId) || {};
+  const existing = avail[ds] && avail[ds].length > 0 ? avail[ds][0] : null;
+
+  const d = parseDate(ds);
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const monNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dateLabel = dayNames[d.getDay()] + ' ' + monNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+
+  const type = existing ? existing.type : 'unavailable';
+  const allDay = existing ? (existing.allDay !== false) : true;
+  const start = existing ? (existing.start || '09:00') : '09:00';
+  const end = existing ? (existing.end || '17:00') : '17:00';
+  const repeats = existing ? (existing.repeats || false) : false;
+  const note = existing ? (existing.note || '') : '';
+
+  // Remove any existing sub page
+  document.querySelectorAll('.mav-edit-page').forEach(s => s.remove());
+
+  const page = document.createElement('div');
+  page.className = 'mav-edit-page open';
+  page.innerHTML = `
+    <div class="ms-header" style="justify-content:flex-start;gap:12px">
+      <span style="font-size:20px;cursor:pointer" onclick="closeMavEdit()">←</span>
+      <span class="ms-title" style="flex:1">ADLP</span>
+      <span style="font-size:20px;cursor:pointer;color:#c8860a" onclick="saveMavEdit('${ds}')">✓</span>
+    </div>
+    <div class="mav-edit-body">
+      <div class="mav-edit-section">
+        <div class="mav-edit-label">Date</div>
+        <div class="mav-edit-date">${dateLabel}</div>
+      </div>
+
+      <div class="mav-edit-section">
+        <label class="mav-radio-row" onclick="document.getElementById('mavTypeUnavail').checked=true">
+          <input type="radio" name="mavType" id="mavTypeUnavail" value="unavailable" ${type === 'unavailable' ? 'checked' : ''}>
+          <span class="mav-radio-dot"></span>
+          <span class="mav-radio-text">I'm unavailable to work</span>
+        </label>
+        <label class="mav-radio-row" onclick="document.getElementById('mavTypePrefer').checked=true">
+          <input type="radio" name="mavType" id="mavTypePrefer" value="preferred" ${type === 'preferred' || type === 'available' ? 'checked' : ''}>
+          <span class="mav-radio-dot"></span>
+          <span class="mav-radio-text">I prefer to work</span>
+        </label>
+      </div>
+
+      <div class="mav-edit-toggle-row">
+        <span>All Day</span>
+        <label class="mav-toggle">
+          <input type="checkbox" id="mavAllDay" ${allDay ? 'checked' : ''} onchange="document.getElementById('mavTimeRow').style.display=this.checked?'none':''">
+          <span class="mav-toggle-track"></span>
+        </label>
+      </div>
+
+      <div class="mav-edit-section" id="mavTimeRow" style="${allDay ? 'display:none' : ''}">
+        <div class="mav-edit-label">Time</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="time" class="mav-time-input" id="mavStart" value="${start}">
+          <span style="color:var(--text-light)">–</span>
+          <input type="time" class="mav-time-input" id="mavEnd" value="${end}">
+        </div>
+      </div>
+
+      <div class="mav-edit-toggle-row">
+        <span>Repeats</span>
+        <label class="mav-toggle">
+          <input type="checkbox" id="mavRepeats" ${repeats ? 'checked' : ''}>
+          <span class="mav-toggle-track"></span>
+        </label>
+      </div>
+
+      <div class="mav-edit-section">
+        <div class="mav-edit-label">Note</div>
+        <input type="text" class="mav-note-input" id="mavNote" placeholder="Add an optional note..." value="${note}">
+      </div>
+
+      <div class="mav-edit-hint">
+        Unavailable because of vacation, illness, etc? <span style="color:var(--lav-dark);text-decoration:underline;cursor:pointer" onclick="closeMavEdit();openTimeOffModal()">Request time off</span> instead.
+      </div>
+
+      ${existing ? '<div style="padding:16px 18px"><button class="mav-delete-btn" onclick="deleteMavPref(\''+ds+'\')">Delete Preference</button></div>' : ''}
+    </div>
+  `;
+  document.body.appendChild(page);
+}
+
+function closeMavEdit() {
+  document.querySelectorAll('.mav-edit-page').forEach(s => s.remove());
+}
+
+function saveMavEdit(ds) {
+  const myId = currentUser ? (currentUser.staffId || currentUser.id) : '';
+  const avail = DB.get('availability_' + myId) || {};
+
+  const type = document.getElementById('mavTypeUnavail').checked ? 'unavailable' : 'preferred';
+  const allDay = document.getElementById('mavAllDay').checked;
+  const start = document.getElementById('mavStart').value;
+  const end = document.getElementById('mavEnd').value;
+  const repeats = document.getElementById('mavRepeats').checked;
+  const note = document.getElementById('mavNote').value;
+
+  avail[ds] = [{
+    type: type,
+    allDay: allDay,
+    start: allDay ? '' : start,
+    end: allDay ? '' : end,
+    repeats: repeats,
+    note: note
+  }];
+
+  DB.set('availability_' + myId, avail);
+  closeMavEdit();
+  renderMobAvail();
+  showToast('✓ Availability saved');
+}
+
+function deleteMavPref(ds) {
+  const myId = currentUser ? (currentUser.staffId || currentUser.id) : '';
+  const avail = DB.get('availability_' + myId) || {};
+  delete avail[ds];
+  DB.set('availability_' + myId, avail);
+  closeMavEdit();
+  renderMobAvail();
+  showToast('✓ Preference removed');
+}
+
+// ── Mobile Edit Shift ──
+let mobEditShiftId = null;
+
+function openMobEditShift(shiftId) {
+  mobEditShiftId = shiftId;
+  switchView('mobedishift', null);
+
+  const shifts = getShifts();
+  const sh = shifts.find(s => s.id === shiftId);
+  if (!sh) { showToast('⚠ Shift not found'); return; }
+
+  const allStaff = getStaff().filter(s => s.status === 'active');
+  const s = allStaff.find(x => x.id === sh.staffId);
+  const pos = sh.position || (s ? s.title : '') || 'Direct Support Professional';
+  const site = sh.jobSite || sh.site || sh.location || '';
+  const dept = sh.dept || 'ADLP';
+  const color = sh.color || 'Peacock';
+  const notes = sh.notes || '';
+  const taskLists = sh.taskLists || '';
+  const tags = sh.tags || '';
+
+  // Format date for display
+  const d = parseDate(sh.date);
+  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dateDisplay = dayNames[d.getDay()] + ', ' + monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+
+  // Build staff options
+  const staffOpts = allStaff.map(st =>
+    `<option value="${st.id}" ${st.id === sh.staffId ? 'selected' : ''}>${st.first} ${st.last}</option>`
+  ).join('');
+
+  // Build position options
+  const positions = (DB.get('positions') || []);
+  const posOpts = positions.map(p =>
+    `<option value="${p.name}" ${p.name === pos ? 'selected' : ''}>${p.name}</option>`
+  ).join('') || `<option value="${pos}" selected>${pos}</option>`;
+
+  // Build job site options
+  const jobSites = (typeof getJobSites==='function'?getJobSites():(DB.get('job_sites')||[]));
+  const siteOpts = '<option value="">None</option>' + jobSites.map(js =>
+    `<option value="${js.name}" ${js.name === site ? 'selected' : ''}>${js.name}</option>`
+  ).join('');
+
+  // Color options
+  const colors = ['Peacock','Lavender','Gold','Red','Green','Blue','Orange','Pink'];
+  const colorOpts = colors.map(c =>
+    `<option value="${c}" ${c === color ? 'selected' : ''}>${c}</option>`
+  ).join('');
+
+  let html = '';
+
+  // Date
+  html += `<div class="mes-row">
+    <div class="mes-icon">📅</div>
+    <div class="mes-field">
+      <div class="mes-label">Date</div>
+      <input type="date" class="mes-input" id="mesDate" value="${sh.date}">
+    </div>
+  </div>`;
+
+  // Start time
+  html += `<div class="mes-row">
+    <div class="mes-icon">🕐</div>
+    <div class="mes-field">
+      <div class="mes-label">Start Time</div>
+      <input type="time" class="mes-input" id="mesStart" value="${sh.start}">
+    </div>
+  </div>`;
+
+  // End time
+  html += `<div class="mes-row">
+    <div class="mes-icon">🕐</div>
+    <div class="mes-field">
+      <div class="mes-label">End Time</div>
+      <input type="time" class="mes-input" id="mesEnd" value="${sh.end}">
+    </div>
+  </div>`;
+
+  // Position
+  html += `<div class="mes-row">
+    <div class="mes-icon">👤</div>
+    <div class="mes-field">
+      <div class="mes-label">Position</div>
+      <select class="mes-select" id="mesPosition">${posOpts}</select>
+    </div>
+  </div>`;
+
+  // Tags
+  html += `<div class="mes-row">
+    <div class="mes-icon">🏷</div>
+    <div class="mes-field">
+      <div class="mes-label">Tags</div>
+      <input type="text" class="mes-input" id="mesTags" value="${tags}" placeholder="Add Tags">
+    </div>
+  </div>`;
+
+  // Unpaid break
+  html += `<div class="mes-row">
+    <div class="mes-icon">☕</div>
+    <div class="mes-field">
+      <div class="mes-label">Unpaid Break (minutes)</div>
+      <input type="number" class="mes-input" id="mesBreak" value="${sh.unpaidBreak || 0}" placeholder="None">
+    </div>
+  </div>`;
+
+  // Job Site
+  html += `<div class="mes-row">
+    <div class="mes-icon">📍</div>
+    <div class="mes-field">
+      <div class="mes-label">Job Site</div>
+      <select class="mes-select" id="mesSite">${siteOpts}</select>
+    </div>
+  </div>`;
+
+  // Assign to
+  html += `<div class="mes-row">
+    <div class="mes-icon">👥</div>
+    <div class="mes-field">
+      <div class="mes-label">Assign To</div>
+      <select class="mes-select" id="mesStaff">${staffOpts}</select>
+    </div>
+  </div>`;
+
+  // Shift color
+  html += `<div class="mes-row">
+    <div class="mes-icon">🎨</div>
+    <div class="mes-field">
+      <div class="mes-label">Shift Color</div>
+      <select class="mes-select" id="mesColor">${colorOpts}</select>
+    </div>
+  </div>`;
+
+  // Task lists
+  html += `<div class="mes-row">
+    <div class="mes-icon">✅</div>
+    <div class="mes-field">
+      <div class="mes-label">Shift Task Lists</div>
+      <input type="text" class="mes-input" id="mesTaskLists" value="${taskLists}" placeholder="None">
+    </div>
+  </div>`;
+
+  // Notes
+  html += `<div class="mes-row" style="align-items:flex-start">
+    <div class="mes-icon" style="margin-top:4px">📝</div>
+    <div class="mes-field">
+      <div class="mes-label">Notes</div>
+      <textarea class="mes-textarea" id="mesNotes" placeholder="Special instructions, reminders…">${notes}</textarea>
+    </div>
+  </div>`;
+
+  // Save as template toggle
+  html += `<div class="mes-toggle-row">
+    <span class="mes-toggle-label">Save as shift template</span>
+    <label style="position:relative;width:44px;height:24px;display:inline-block">
+      <input type="checkbox" id="mesSaveTemplate" style="opacity:0;width:0;height:0">
+      <span style="position:absolute;inset:0;background:#ccc;border-radius:12px;cursor:pointer;transition:.2s" onclick="this.style.background=this.previousElementSibling.checked?'#ccc':'var(--gold-dark)'"></span>
+      <span style="position:absolute;top:2px;left:2px;width:20px;height:20px;background:white;border-radius:50%;transition:.2s;pointer-events:none" id="mesToggleKnob"></span>
+    </label>
+  </div>`;
+
+  document.getElementById('mesContent').innerHTML = html;
+}
+
+function saveMobEditShift() {
+  const shifts = getShifts();
+  const idx = shifts.findIndex(s => s.id === mobEditShiftId);
+  if (idx === -1) { showToast('⚠ Shift not found'); return; }
+
+  shifts[idx].date = document.getElementById('mesDate').value;
+  shifts[idx].start = document.getElementById('mesStart').value;
+  shifts[idx].end = document.getElementById('mesEnd').value;
+  shifts[idx].position = document.getElementById('mesPosition').value;
+  shifts[idx].tags = document.getElementById('mesTags').value;
+  shifts[idx].unpaidBreak = parseInt(document.getElementById('mesBreak').value) || 0;
+  shifts[idx].location = document.getElementById('mesSite').value;
+  shifts[idx].jobSite = document.getElementById('mesSite').value;
+  shifts[idx].staffId = document.getElementById('mesStaff').value;
+  shifts[idx].color = document.getElementById('mesColor').value;
+  shifts[idx].taskLists = document.getElementById('mesTaskLists').value;
+  shifts[idx].notes = document.getElementById('mesNotes').value;
+
+  DB.set('shifts', shifts);
+  showToast('✓ Shift saved');
+  openMobShiftDetail(mobEditShiftId);
+}
 
 // ── Mobile Send Email ──
 let mobEmailSelected = []; // array of { id, name, email, color, initials }
@@ -20068,140 +22622,136 @@ function selectMobPP(idx) {
   showToast('📅 Pay period selected');
 }
 
-// ── Swipe Gesture Handler ──
-// Attaches to full page areas, no flashing, smooth transitions
+// ── Swipe Gesture Handler — follows finger ──
 (function() {
   let startX = 0, startY = 0, tracking = false, isHorizontal = null;
-  const THRESHOLD = 50;
+  let currentEl = null;
+  const THRESHOLD = 60;
 
-  function getSwipeConfig() {
-    // Determine what tabs are available based on current view
+  function getSwipeTarget() {
     const activeView = document.querySelector('.view.active');
     if (!activeView) return null;
     const viewId = activeView.id;
 
-    // Scheduler: All Shifts / Open Shifts / My Shifts
     if (viewId === 'view-scheduler') {
-      const tabs = ['all', 'open', 'mine'];
-      const tabEls = { all: 'msTabAll', open: 'msTabOpen', mine: 'msTabMine' };
-      return {
-        tabs, getCurrent: () => msTab,
-        setTab: (tab, dir) => {
-          setMsTab(tab, document.getElementById(tabEls[tab]));
-          applySwipeAnim('msDayContent', dir);
-        }
-      };
+      return { el: document.getElementById('msDayContent'), tabs: ['all','open','mine'], getCurrent: () => msTab,
+        setTab: (tab) => setMsTab(tab, document.getElementById({all:'msTabAll',open:'msTabOpen',mine:'msTabMine'}[tab])) };
     }
-
-    // Profile: Profile / Alerts
     if (viewId === 'view-profile') {
-      return {
-        tabs: ['profile', 'alerts'],
-        getCurrent: () => mobProfTab,
-        setTab: (tab, dir) => {
-          setMobProfTab(tab, document.getElementById(tab === 'profile' ? 'mpTabProfile' : 'mpTabAlerts'));
-          applySwipeAnim('mobProfContent', dir);
-        }
+      return { el: document.getElementById('mobProfContent'), tabs: ['profile','alerts'], getCurrent: () => mobProfTab,
+        setTab: (tab) => setMobProfTab(tab, document.getElementById(tab==='profile'?'mpTabProfile':'mpTabAlerts')) };
+    }
+    const mainViews = ['schedule','scheduler','timesheets','workchat','more'];
+    const cur = viewId.replace('view-','');
+    if (mainViews.includes(cur)) {
+      return { el: activeView, tabs: mainViews, getCurrent: () => cur,
+        setTab: (tab) => { mobNav(tab); const idx=mainViews.indexOf(tab); document.querySelectorAll('.mob-nav-btn').forEach((b,j)=>b.classList.toggle('active',j===idx)); }
       };
     }
-
-    // Main bottom nav views
-    const mainViews = ['schedule', 'scheduler', 'timesheets', 'workchat', 'more'];
-    const currentMain = viewId.replace('view-', '');
-    if (mainViews.includes(currentMain)) {
-      return {
-        tabs: mainViews,
-        getCurrent: () => currentMain,
-        setTab: (tab, dir) => {
-          mobNav(tab);
-          // Update bottom nav active state
-          const idx = mainViews.indexOf(tab);
-          document.querySelectorAll('.mob-nav-btn').forEach((b, j) => {
-            b.classList.toggle('active', j === idx);
-          });
-          applySwipeAnim(activeView.id, dir);
-        }
-      };
-    }
-
     return null;
   }
 
-  function applySwipeAnim(elId, dir) {
-    const el = document.getElementById(elId) || document.querySelector('.view.active');
-    if (!el) return;
-    el.classList.remove('swipe-left-enter', 'swipe-right-enter');
-    void el.offsetWidth; // force reflow
-    el.classList.add(dir === 'left' ? 'swipe-left-enter' : 'swipe-right-enter');
-    setTimeout(() => el.classList.remove('swipe-left-enter', 'swipe-right-enter'), 200);
+  function onStart(x, y) {
+    if (window.innerWidth > 768) return;
+    startX = x; startY = y; tracking = true; isHorizontal = null;
+    const target = getSwipeTarget();
+    currentEl = target ? target.el : null;
+    if (currentEl) {
+      currentEl.style.transition = 'none';
+      currentEl.classList.remove('swipe-enter-left','swipe-enter-right');
+    }
   }
 
+  function onMove(x, y) {
+    if (!tracking || !currentEl) return;
+    const dx = x - startX;
+    const dy = y - startY;
+    if (isHorizontal === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+      isHorizontal = Math.abs(dx) > Math.abs(dy);
+      if (!isHorizontal) { tracking = false; return; }
+    }
+    if (isHorizontal) {
+      // Move content with finger — dampen the movement slightly
+      const move = dx * 0.6;
+      const opacity = Math.max(0.4, 1 - Math.abs(dx) / 400);
+      currentEl.style.transform = `translateX(${move}px)`;
+      currentEl.style.opacity = opacity;
+    }
+  }
+
+  function onEnd(x) {
+    if (!tracking || !currentEl) { tracking = false; return; }
+    tracking = false;
+    if (!isHorizontal) { resetEl(); return; }
+
+    const dx = x - startX;
+    const target = getSwipeTarget();
+    if (!target) { resetEl(); return; }
+
+    const currentIdx = target.tabs.indexOf(target.getCurrent());
+    let switched = false;
+
+    if (dx < -THRESHOLD && currentIdx < target.tabs.length - 1) {
+      // Swiped left — slide out to left, then switch and slide in from right
+      currentEl.style.transition = 'transform .15s ease, opacity .15s ease';
+      currentEl.style.transform = 'translateX(-100px)';
+      currentEl.style.opacity = '0';
+      setTimeout(() => {
+        target.setTab(target.tabs[currentIdx + 1]);
+        const newTarget = getSwipeTarget();
+        const newEl = newTarget ? newTarget.el : currentEl;
+        newEl.style.transition = 'none';
+        newEl.style.transform = '';
+        newEl.style.opacity = '';
+        newEl.classList.add('swipe-enter-right');
+        setTimeout(() => newEl.classList.remove('swipe-enter-right'), 250);
+      }, 150);
+      switched = true;
+    } else if (dx > THRESHOLD && currentIdx > 0) {
+      // Swiped right — slide out to right, then switch and slide in from left
+      currentEl.style.transition = 'transform .15s ease, opacity .15s ease';
+      currentEl.style.transform = 'translateX(100px)';
+      currentEl.style.opacity = '0';
+      setTimeout(() => {
+        target.setTab(target.tabs[currentIdx - 1]);
+        const newTarget = getSwipeTarget();
+        const newEl = newTarget ? newTarget.el : currentEl;
+        newEl.style.transition = 'none';
+        newEl.style.transform = '';
+        newEl.style.opacity = '';
+        newEl.classList.add('swipe-enter-left');
+        setTimeout(() => newEl.classList.remove('swipe-enter-left'), 250);
+      }, 150);
+      switched = true;
+    }
+
+    if (!switched) resetEl();
+  }
+
+  function resetEl() {
+    if (!currentEl) return;
+    currentEl.style.transition = 'transform .2s ease, opacity .2s ease';
+    currentEl.style.transform = '';
+    currentEl.style.opacity = '';
+    setTimeout(() => { if (currentEl) currentEl.style.transition = ''; }, 200);
+  }
+
+  // Touch
   document.addEventListener('touchstart', e => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    tracking = true;
-    isHorizontal = null;
-  }, { passive: true });
+    // Don't capture swipes inside calendar dropdown or filter panels
+    if (e.target.closest('.ms-cal-dropdown, .ms-filter-panel, .msf-sub')) return;
+    onStart(e.touches[0].clientX, e.touches[0].clientY);
+  }, {passive:true});
+  document.addEventListener('touchmove', e => onMove(e.touches[0].clientX, e.touches[0].clientY), {passive:true});
+  document.addEventListener('touchend', e => onEnd(e.changedTouches[0].clientX), {passive:true});
 
-  document.addEventListener('touchmove', e => {
-    if (!tracking) return;
-    const dx = e.touches[0].clientX - startX;
-    const dy = e.touches[0].clientY - startY;
-    if (isHorizontal === null && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
-      isHorizontal = Math.abs(dx) > Math.abs(dy);
-    }
-  }, { passive: true });
-
-  document.addEventListener('touchend', e => {
-    if (!tracking) return;
-    tracking = false;
-    if (!isHorizontal) return;
-
-    const dx = e.changedTouches[0].clientX - startX;
-    if (Math.abs(dx) < THRESHOLD) return;
-
-    // Only work on mobile
-    if (window.innerWidth > 768) return;
-
-    const config = getSwipeConfig();
-    if (!config) return;
-
-    const currentIdx = config.tabs.indexOf(config.getCurrent());
-    if (dx < -THRESHOLD && currentIdx < config.tabs.length - 1) {
-      config.setTab(config.tabs[currentIdx + 1], 'left');
-    } else if (dx > THRESHOLD && currentIdx > 0) {
-      config.setTab(config.tabs[currentIdx - 1], 'right');
-    }
-  }, { passive: true });
-
-  // Mouse support for Chrome DevTools
+  // Mouse (DevTools)
   document.addEventListener('mousedown', e => {
-    if (window.innerWidth > 768) return;
-    startX = e.clientX; startY = e.clientY; tracking = true; isHorizontal = null;
+    if (e.target.closest('.ms-cal-dropdown, .ms-filter-panel, .msf-sub')) return;
+    onStart(e.clientX, e.clientY);
   });
-  document.addEventListener('mousemove', e => {
-    if (!tracking || window.innerWidth > 768) return;
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-    if (isHorizontal === null && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
-      isHorizontal = Math.abs(dx) > Math.abs(dy);
-    }
-  });
-  document.addEventListener('mouseup', e => {
-    if (!tracking || window.innerWidth > 768) return;
-    tracking = false;
-    if (!isHorizontal) return;
-    const dx = e.clientX - startX;
-    if (Math.abs(dx) < THRESHOLD) return;
-    const config = getSwipeConfig();
-    if (!config) return;
-    const currentIdx = config.tabs.indexOf(config.getCurrent());
-    if (dx < -THRESHOLD && currentIdx < config.tabs.length - 1) {
-      config.setTab(config.tabs[currentIdx + 1], 'left');
-    } else if (dx > THRESHOLD && currentIdx > 0) {
-      config.setTab(config.tabs[currentIdx - 1], 'right');
-    }
-  });
+  document.addEventListener('mousemove', e => { if(tracking) onMove(e.clientX, e.clientY); });
+  document.addEventListener('mouseup', e => onEnd(e.clientX));
 })();
 
 // ── Mobile Scheduler ──
@@ -20220,7 +22770,349 @@ function selectMsDay(ds) {
   renderMobSched();
 }
 
-function mobSchedToggleView() { /* future: toggle calendar/list */ }
+// ── Mobile Filters ──
+let mobFiltersOpen = false;
+
+function toggleMobFilters() {
+  mobFiltersOpen = !mobFiltersOpen;
+  document.getElementById('msFilterPanel').classList.toggle('open', mobFiltersOpen);
+  document.getElementById('msFilterOverlay').classList.toggle('open', mobFiltersOpen);
+  if (mobFiltersOpen) renderMobFilters();
+  // Close any open sub-pages
+  document.querySelectorAll('.msf-sub').forEach(s => s.remove());
+}
+
+function renderMobFilters() {
+  const staff = getStaff().filter(s => s.status === 'active');
+  const positions = DB.get('positions') || [];
+  const jobSites = typeof getJobSites==='function'?getJobSites():(DB.get('job_sites')||[]) || [];
+  const tags = DB.get('tags') || [];
+
+  const usersVal = schedFilterState.users.size ? staff.filter(s => schedFilterState.users.has(s.id)).map(s => s.first).join(', ') : 'All Employees';
+  const posVal = schedFilterState.positions.size ? [...schedFilterState.positions].join(', ') : 'All Positions';
+  const sitesVal = schedFilterState.sites.size ? [...schedFilterState.sites].join(', ') : 'All Job Sites';
+  const tagsVal = schedFilterState.tags.size ? [...schedFilterState.tags].join(', ') : 'No Tags';
+  const colorsVal = schedFilterState.colors.size ? schedFilterState.colors.size + ' selected' : 'All Colors';
+
+  let html = '';
+
+  // Schedule (department)
+  html += `<div class="msf-row" onclick="showToast('📋 Schedule filter coming soon')">
+    <div class="msf-row-icon">📋</div>
+    <div class="msf-row-info">
+      <div class="msf-row-label">Schedule</div>
+      <div class="msf-row-value">ADLP</div>
+    </div>
+    <span class="msf-row-arrow">›</span>
+  </div>`;
+
+  // Job Sites
+  html += `<div class="msf-row" onclick="openMsfSub('sites')">
+    <div class="msf-row-icon">📍</div>
+    <div class="msf-row-info">
+      <div class="msf-row-label">Job Sites</div>
+      <div class="msf-row-value">${sitesVal}</div>
+    </div>
+    <span class="msf-row-arrow">›</span>
+  </div>`;
+
+  // Positions
+  html += `<div class="msf-row" onclick="openMsfSub('positions')">
+    <div class="msf-row-icon">👤</div>
+    <div class="msf-row-info">
+      <div class="msf-row-label">Positions</div>
+      <div class="msf-row-value">${posVal}</div>
+    </div>
+    <span class="msf-row-arrow">›</span>
+  </div>`;
+
+  // Tags
+  html += `<div class="msf-row" onclick="openMsfSub('tags')">
+    <div class="msf-row-icon">🏷</div>
+    <div class="msf-row-info">
+      <div class="msf-row-label">Tags</div>
+      <div class="msf-row-value">${tagsVal}</div>
+    </div>
+    <span class="msf-row-arrow">›</span>
+  </div>`;
+
+  // Assignee
+  html += `<div class="msf-row" onclick="openMsfSub('users')">
+    <div class="msf-row-icon">👥</div>
+    <div class="msf-row-info">
+      <div class="msf-row-label">Assignee</div>
+      <div class="msf-row-value">${usersVal}</div>
+    </div>
+    <span class="msf-row-arrow">›</span>
+  </div>`;
+
+  // Shift Colors
+  html += `<div class="msf-row" onclick="openMsfSub('colors')">
+    <div class="msf-row-icon">🎨</div>
+    <div class="msf-row-info">
+      <div class="msf-row-label">Shift Colors</div>
+      <div class="msf-row-value">${colorsVal}</div>
+    </div>
+    <span class="msf-row-arrow">›</span>
+  </div>`;
+
+  document.getElementById('msfBody').innerHTML = html;
+  updateMsfReset();
+}
+
+function openMsfSub(type) {
+  // Remove existing sub
+  document.querySelectorAll('.msf-sub').forEach(s => s.remove());
+
+  const staff = getStaff().filter(s => s.status === 'active');
+  const positions = DB.get('positions') || [];
+  const jobSites = typeof getJobSites==='function'?getJobSites():(DB.get('job_sites')||[]) || [];
+  const tags = DB.get('tags') || [];
+  const colors = [
+    {id:'sc-teal',name:'Peacock',hex:'#008B8B'},
+    {id:'sc-lav',name:'Lavender',hex:'#9A70BB'},
+    {id:'sc-gold',name:'Gold',hex:'#c8860a'},
+    {id:'sc-red',name:'Red',hex:'#dc2626'},
+    {id:'sc-green',name:'Green',hex:'#059669'},
+    {id:'sc-blue',name:'Blue',hex:'#2563eb'},
+    {id:'sc-orange',name:'Orange',hex:'#ea580c'},
+    {id:'sc-pink',name:'Pink',hex:'#db2777'}
+  ];
+
+  const titles = { users:'Employees', positions:'Positions', sites:'Job Sites', tags:'Tags', colors:'Shift Colors' };
+  let items = [];
+
+  if (type === 'users') items = staff.map(s => ({id:s.id, name:s.first+' '+s.last}));
+  if (type === 'positions') items = positions.map(p => ({id:p.id||p.name, name:p.name}));
+  if (type === 'sites') items = jobSites.map(js => ({id:js.name, name:js.name}));
+  if (type === 'tags') items = tags.map(t => ({id:t.id||t.name, name:t.name}));
+  if (type === 'colors') items = colors.map(c => ({id:c.id, name:c.name, hex:c.hex}));
+
+  let optHtml = items.map(item => {
+    const active = schedFilterState[type].has(item.id);
+    const dot = item.hex ? `<span class="msf-option-dot" style="background:${item.hex}"></span>` : '';
+    return `<div class="msf-option" onclick="toggleMsfOption('${type}','${item.id}',this)">
+      <div class="msf-option-check ${active?'active':''}">${active?'✓':''}</div>
+      ${dot}
+      <span class="msf-option-name">${item.name}</span>
+    </div>`;
+  }).join('');
+
+  if (items.length === 0) {
+    optHtml = '<div style="padding:20px;text-align:center;color:var(--text-light)">No items configured</div>';
+  }
+
+  const sub = document.createElement('div');
+  sub.className = 'msf-sub open';
+  sub.innerHTML = `
+    <div class="msf-sub-header">
+      <span style="font-size:20px;cursor:pointer" onclick="closeMsfSub()">←</span>
+      <span class="msf-sub-title">${titles[type]}</span>
+    </div>
+    <div class="msf-sub-body">${optHtml}</div>
+  `;
+  document.body.appendChild(sub);
+}
+
+function closeMsfSub() {
+  document.querySelectorAll('.msf-sub').forEach(s => {
+    s.style.animation = 'none';
+    s.remove();
+  });
+  renderMobFilters();
+}
+
+function toggleMsfOption(type, key, el) {
+  const check = el.querySelector('.msf-option-check');
+  if (schedFilterState[type].has(key)) {
+    schedFilterState[type].delete(key);
+    check.classList.remove('active');
+    check.textContent = '';
+  } else {
+    schedFilterState[type].add(key);
+    check.classList.add('active');
+    check.textContent = '✓';
+  }
+  renderMobSched();
+}
+
+function updateMsfReset() {
+  const has = schedFilterState.positions.size || schedFilterState.sites.size ||
+    schedFilterState.tags.size || schedFilterState.colors.size || schedFilterState.users.size;
+  const link = document.getElementById('msfResetLink');
+  if (link) link.style.display = has ? '' : 'none';
+  const icon = document.getElementById('msFilterIcon');
+  if (icon) icon.style.color = has ? 'var(--gold-dark)' : '';
+}
+
+function resetMobFilters() {
+  schedFilterState.positions.clear();
+  schedFilterState.sites.clear();
+  schedFilterState.tags.clear();
+  schedFilterState.colors.clear();
+  schedFilterState.users.clear();
+  renderMobFilters();
+  renderMobSched();
+  updateMsfReset();
+  showToast('✓ Filters cleared');
+}
+
+let mobCalOpen = false;
+let mobCalViewDate = new Date(TODAY);
+
+function mobSchedToggleView(mode) {
+  if (mode === 'cal') {
+    mobCalOpen = !mobCalOpen;
+    const dd = document.getElementById('msCalDropdown');
+    if (mobCalOpen) {
+      mobCalViewDate = parseDate(msSelectedDate);
+      renderMobCal();
+      dd.classList.add('open');
+    } else {
+      dd.classList.remove('open');
+    }
+  } else {
+    // List mode — close calendar if open
+    mobCalOpen = false;
+    document.getElementById('msCalDropdown').classList.remove('open');
+  }
+}
+
+function mobCalNav(dir) {
+  mobCalViewDate.setMonth(mobCalViewDate.getMonth() + dir);
+  renderMobCal();
+}
+
+function renderMobCal() {
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const y = mobCalViewDate.getFullYear();
+  const m = mobCalViewDate.getMonth();
+
+  document.getElementById('msCalMonth').textContent = monthNames[m] + ' ' + y;
+
+  // Get shifts for this month to show dots
+  const shifts = getShifts();
+  const shiftDates = new Set(shifts.map(s => s.date));
+
+  // Build calendar grid
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m + 1, 0).getDate();
+  const prevMonthDays = new Date(y, m, 0).getDate();
+
+  const todayStr = dateStr(TODAY);
+  const selectedStr = msSelectedDate;
+
+  let html = '';
+
+  // Previous month trailing days
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const day = prevMonthDays - i;
+    const d = new Date(y, m - 1, day);
+    const ds = dateStr(d);
+    html += `<div class="ms-cal-cell other-month" onclick="mobCalPick('${ds}')">${day}</div>`;
+  }
+
+  // Current month days
+  for (let day = 1; day <= daysInMonth; day++) {
+    const d = new Date(y, m, day);
+    const ds = dateStr(d);
+    let cls = 'ms-cal-cell';
+    if (ds === todayStr) cls += ' today';
+    if (ds === selectedStr) cls += ' selected';
+    if (shiftDates.has(ds)) cls += ' has-shift';
+    html += `<div class="${cls}" onclick="mobCalPick('${ds}')">${day}</div>`;
+  }
+
+  // Next month leading days
+  const totalCells = firstDay + daysInMonth;
+  const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+  for (let i = 1; i <= remaining; i++) {
+    const d = new Date(y, m + 1, i);
+    const ds = dateStr(d);
+    html += `<div class="ms-cal-cell other-month" onclick="mobCalPick('${ds}')">${i}</div>`;
+  }
+
+  document.getElementById('msCalGrid').innerHTML = html;
+}
+
+function mobCalPick(ds) {
+  msSelectedDate = ds;
+  mobCalOpen = false;
+  document.getElementById('msCalDropdown').classList.remove('open');
+  renderMobSched();
+}
+
+// Calendar swipe navigation
+(function() {
+  let calStartX = 0, calStartY = 0, calTracking = false, calIsH = null;
+  const CAL_THRESHOLD = 50;
+
+  document.addEventListener('touchstart', e => {
+    const dd = document.getElementById('msCalDropdown');
+    if (!dd || !dd.classList.contains('open')) return;
+    if (!dd.contains(e.target)) return;
+    calStartX = e.touches[0].clientX;
+    calStartY = e.touches[0].clientY;
+    calTracking = true;
+    calIsH = null;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if (!calTracking) return;
+    const dx = e.touches[0].clientX - calStartX;
+    const dy = e.touches[0].clientY - calStartY;
+    if (calIsH === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+      calIsH = Math.abs(dx) > Math.abs(dy);
+      if (!calIsH) calTracking = false;
+    }
+    if (calIsH) {
+      const grid = document.getElementById('msCalGrid');
+      if (grid) {
+        grid.style.transform = `translateX(${dx * 0.4}px)`;
+        grid.style.opacity = Math.max(0.5, 1 - Math.abs(dx) / 300);
+      }
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    if (!calTracking) return;
+    calTracking = false;
+    if (!calIsH) return;
+
+    const dx = e.changedTouches[0].clientX - calStartX;
+    const grid = document.getElementById('msCalGrid');
+
+    if (Math.abs(dx) > CAL_THRESHOLD) {
+      const dir = dx < 0 ? 1 : -1;
+      if (grid) {
+        grid.style.transition = 'transform .15s ease, opacity .15s ease';
+        grid.style.transform = `translateX(${dx < 0 ? -80 : 80}px)`;
+        grid.style.opacity = '0';
+      }
+      setTimeout(() => {
+        mobCalNav(dir);
+        if (grid) {
+          grid.style.transition = 'none';
+          grid.style.transform = `translateX(${dx < 0 ? 60 : -60}px)`;
+          grid.style.opacity = '0';
+          requestAnimationFrame(() => {
+            grid.style.transition = 'transform .2s ease, opacity .2s ease';
+            grid.style.transform = '';
+            grid.style.opacity = '';
+          });
+        }
+      }, 150);
+    } else {
+      // Snap back
+      if (grid) {
+        grid.style.transition = 'transform .2s ease, opacity .2s ease';
+        grid.style.transform = '';
+        grid.style.opacity = '';
+        setTimeout(() => { grid.style.transition = ''; }, 200);
+      }
+    }
+  }, { passive: true });
+})();
 
 function renderMobSched() {
   if (!currentUser) return;
@@ -20271,6 +23163,20 @@ function renderMobSched() {
   if (msTab === 'mine') dayShifts = dayShifts.filter(s => s.staffId === myId);
   if (msTab === 'open') dayShifts = [];
 
+  // Apply filters
+  if (schedFilterState.users.size) dayShifts = dayShifts.filter(s => schedFilterState.users.has(s.staffId));
+  if (schedFilterState.positions.size) dayShifts = dayShifts.filter(s => {
+    const st = staff.find(x => x.id === s.staffId);
+    const pos = s.position || s.positionId || (st ? st.title : '');
+    return schedFilterState.positions.has(pos) || schedFilterState.positions.has(s.positionId);
+  });
+  if (schedFilterState.sites.size) dayShifts = dayShifts.filter(s => schedFilterState.sites.has(s.jobSite || s.site || s.location || ''));
+  if (schedFilterState.colors.size) dayShifts = dayShifts.filter(s => schedFilterState.colors.has(s.color || 'sc-lav'));
+  if (schedFilterState.tags.size) dayShifts = dayShifts.filter(s => {
+    const sTags = (s.tags || '').split(',').filter(Boolean);
+    return sTags.some(t => schedFilterState.tags.has(t));
+  });
+
   dayShifts.sort((a, b) => (a.start || '').localeCompare(b.start || ''));
 
   // Annotations for this day
@@ -20318,7 +23224,7 @@ function renderMobSched() {
         if (!s) return;
         const pos = sh.position || s.title || 'Direct Support Professional';
         const site = sh.jobSite || sh.site || sh.location || '';
-        html += `<div class="ms-shift-card" onclick="openEditShift('${sh.id}')">
+        html += `<div class="ms-shift-card" onclick="window.innerWidth<=768?openMobShiftDetail('${sh.id}'):editShift('${sh.id}')">
           <div class="ms-sc-av" style="background:${s.color || '#9A70BB'}">${s.initials || s.first[0]}</div>
           <div class="ms-sc-info">
             <div class="ms-sc-time">${fmtT(sh.start)} – ${fmtT(sh.end)} <span class="ms-sc-check">☑</span></div>
